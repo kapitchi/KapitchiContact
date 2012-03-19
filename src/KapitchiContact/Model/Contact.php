@@ -39,32 +39,55 @@ class Contact extends ModelAbstract {
         $this->id = $id;
     }
     
-    public function setPhoneNumbers(array $phoneNumbers) {
-        $this->phoneNumbers = PluralField::fromArray($phoneNumbers);
+    public function setPhoneNumbers($phoneNumbers) {
+        if(!$phoneNumbers instanceof PluralField) {
+            $phoneNumbers = PluralField::fromArray($phoneNumbers);
+        }
+        
+        $this->phoneNumbers = $phoneNumbers;
     }
     
     public function getPhoneNumbers() {
         return $this->phoneNumbers;
     }
     
-    public function setEmails(array $emails) {
-        $this->emails = PluralField::fromArray($emails);
+    public function setEmails($emails) {
+        if(!$emails instanceof PluralField) {
+            $emails = PluralField::fromArray($emails);
+        }
+        
+        $this->emails = $emails;
     }
     
     public function getEmails() {
         return $this->emails;
     }
     
-    public function setAddresses(array $addresses) {
-        $this->addresses = PluralField::fromArray($addresses);
+    public function setAddresses($addresses) {
+        if(!$addresses instanceof PluralField) {
+            //TODO this is fix until we decide how to handle object pluralfields
+            $array = array();
+            foreach($addresses as $type => $address) {
+                $address['value'] = \KapitchiAddress\Model\Address::fromArray($address['value']);
+                $array[$type] = $address;
+                
+            }
+            $addresses = PluralField::fromArray($array);
+        }
+        
+        $this->addresses = $addresses;
     }
     
     public function getAddresses() {
         return $this->addresses;
     }
     
-    public function setName(array $name) {
-        $this->name = Name::fromArray($name);
+    public function setName($name) {
+        if(!$name instanceof Name) {
+            $name = Name::fromArray($name);
+        }
+        
+        $this->name = $name;
     }
     
     public function getName() {

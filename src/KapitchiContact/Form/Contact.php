@@ -73,6 +73,26 @@ class Contact extends Form {
         }
         $this->addSubForm($emailsSubForm, 'emails');
         
+        //address
+        $addressesSubForm = new SubForm();
+        foreach(array(
+            'personal' => 'Personal address',
+            'work' => 'Work address') as $type => $label) {
+            
+            $typeForm = new SubForm();
+            //$typeForm->addElement('select', 'type');
+            $typeForm->addElement('checkbox', 'primary', array(
+                'label' => 'Primary'
+            ));
+            
+            $addressForm = new \KapitchiAddress\Form\Address();
+            $addressForm->setIsArray(true);
+            $addressForm->removeDecorator('FormDecorator');
+            $typeForm->addSubForm($addressForm, 'value');
+            
+            $addressesSubForm->addSubForm($typeForm, $type);
+        }
+        $this->addSubForm($addressesSubForm, 'addresses');
         
     }
 }
