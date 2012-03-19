@@ -115,7 +115,7 @@ class ContactZendDb extends DbAdapterMapper implements ContactMapper {
     protected function getPluralFieldAddressMapper() {
         $mapper = new \KapitchiBase\Mapper\PluralFieldObjectDbAdapter();
         $mapper->setDbAdapter($this->getReadAdapter());
-        $objectMapper = new \KapitchiAddress\Model\Mapper\AddressDbAdapter();
+        $objectMapper = new \KapitchiLocation\Model\Mapper\AddressDbAdapter();
         $objectMapper->setDbAdapter($this->getReadAdapter());
         $mapper->setObjectMapper($objectMapper);
         $mapper->setTableName('contact_addresses');

@@ -68,7 +68,7 @@ class Contact extends ModelAbstract {
             //TODO this is fix until we decide how to handle object pluralfields
             $array = array();
             foreach($addresses as $type => $address) {
-                $address['value'] = \KapitchiAddress\Model\Address::fromArray($address['value']);
+                $address['value'] = \KapitchiLocation\Model\Address::fromArray($address['value']);
                 $array[$type] = $address;
                 
             }

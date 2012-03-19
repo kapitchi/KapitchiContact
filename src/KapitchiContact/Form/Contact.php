@@ -85,7 +85,7 @@ class Contact extends Form {
                 'label' => 'Primary'
             ));
             
-            $addressForm = new \KapitchiAddress\Form\Address();
+            $addressForm = new \KapitchiLocation\Form\Address();
             $addressForm->setIsArray(true);
             $addressForm->removeDecorator('FormDecorator');
             $typeForm->addSubForm($addressForm, 'value');
