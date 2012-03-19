@@ -15,3 +15,4 @@ Requirements
 
 * [Zend Framework 2](https://github.com/zendframework/zf2) (latest master)
 * [KapitchiBase](https://github.com/matuszemi/KapitchiBase) (latest master)
+* [KapitchiAddress](https://github.com/matuszemi/KapitchiAddress) (latest master)
