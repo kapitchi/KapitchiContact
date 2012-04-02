@@ -5,11 +5,11 @@ namespace KapitchiContact\Model\Mapper;
 use     KapitchiContact\Model\Mapper\Contact as ContactMapper,
         KapitchiBase\Mapper\PluralFieldStringDbAdapter,
         KapitchiBase\Mapper\PluralFieldObjectDbAdapter,
-        KapitchiBase\Mapper\DbAdapterMapper,
-        KapitchiBase\Model\ModelAbstract,
+        ZfcBase\Mapper\DbAdapterMapper,
+        ZfcBase\Model\ModelAbstract,
         KapitchiContact\Model\Contact as ContactModel;
 
-class ContactZendDb extends DbAdapterMapper implements ContactMapper {
+class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
     protected $tableName = 'contact';
     
     public function persist(ModelAbstract $model) {

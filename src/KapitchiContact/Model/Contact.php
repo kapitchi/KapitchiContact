@@ -3,7 +3,7 @@
 namespace KapitchiContact\Model;
 
 use KapitchiBase\Stdlib\PluralField,
-        KapitchiBase\Model\ModelAbstract;
+    ZfcBase\Model\ModelAbstract;
 
 /**
  * Let's try to be as much compatible with OpenSocial as possible.

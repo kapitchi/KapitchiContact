@@ -10,7 +10,7 @@ return array(
             'KapitchiContact\Service\Contact' => array(
                 'parameters' => array(
                     'modelPrototype' => 'KapitchiContact\Model\Contact',
-                    'mapper' => 'KapitchiContact\Model\Mapper\ContactZendDb',
+                    'mapper' => 'KapitchiContact\Model\Mapper\ContactDbAdapter',
                 )
             ),
         ),

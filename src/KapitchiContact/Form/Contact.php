@@ -2,7 +2,7 @@
 
 namespace KapitchiContact\Form;
 
-use Zend\Form\Form,
+use ZfcBase\Form\Form,
     Zend\Form\SubForm;
 
 class Contact extends Form {
