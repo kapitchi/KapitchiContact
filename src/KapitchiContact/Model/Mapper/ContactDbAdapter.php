@@ -118,14 +118,14 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
         $objectMapper = new \KapitchiLocation\Model\Mapper\AddressDbAdapter();
         $objectMapper->setDbAdapter($this->getReadAdapter());
         $mapper->setObjectMapper($objectMapper);
-        $mapper->setTableName('contact_addresses');
+        $mapper->setTableName('contact_prop_addresses');
         return $mapper;
     }
     
     protected function getPluralFieldMapper($field) {
         $mapper = new PluralFieldStringDbAdapter();
         $mapper->setDbAdapter($this->getReadAdapter());
-        $mapper->setTableName('contact_' . $field);
+        $mapper->setTableName('contact_prop_' . $field);
         
         return $mapper;
     }
