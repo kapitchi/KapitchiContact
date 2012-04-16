@@ -74,7 +74,7 @@ class Contact extends Form {
         $this->addSubForm($emailsSubForm, 'emails');
         
         //address
-        $addressesSubForm = new SubForm();
+        /*$addressesSubForm = new SubForm();
         foreach(array(
             'personal' => 'Personal address',
             'work' => 'Work address') as $type => $label) {
@@ -93,6 +93,7 @@ class Contact extends Form {
             $addressesSubForm->addSubForm($typeForm, $type);
         }
         $this->addSubForm($addressesSubForm, 'addresses');
+        */
         
     }
 }

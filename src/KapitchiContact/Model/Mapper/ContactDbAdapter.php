@@ -2,15 +2,16 @@
 
 namespace KapitchiContact\Model\Mapper;
 
-use     KapitchiContact\Model\Mapper\Contact as ContactMapper,
-        KapitchiBase\Mapper\PluralFieldStringDbAdapter,
-        KapitchiBase\Mapper\PluralFieldObjectDbAdapter,
-        ZfcBase\Mapper\DbAdapterMapper,
-        ZfcBase\Model\ModelAbstract,
-        KapitchiContact\Model\Contact as ContactModel;
+use KapitchiContact\Model\Mapper\ContactInterface,
+    KapitchiBase\Mapper\PluralFieldStringDbAdapter,
+    KapitchiBase\Mapper\PluralFieldObjectDbAdapter,
+    ZfcBase\Mapper\DbAdapterMapper,
+    ZfcBase\Model\ModelAbstract,
+    KapitchiContact\Model\Contact as ContactModel;
 
-class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
+class ContactDbAdapter extends DbAdapterMapper implements ContactInterface {
     protected $tableName = 'contact';
+    protected $modelPrototype;
     
     public function persist(ModelAbstract $model) {
         if($model->getId()) {
@@ -25,8 +26,8 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
             $mapper->persist($model->getId(), $model[$field]);
         }
         
-        $addressMapper = $this->getPluralFieldAddressMapper();
-        $addressMapper->persist($model->getId(), $model->getAddresses());
+        //$addressMapper = $this->getPluralFieldAddressMapper();
+        //$addressMapper->persist($model->getId(), $model->getAddresses());
         
         return $ret;
     }
@@ -81,8 +82,8 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
             $model[$field] = $emailMapper->findByEntityId($id);
         }
         
-        $addressMapper = $this->getPluralFieldAddressMapper();
-        $model->setAddresses($addressMapper->findByEntityId($id));
+        //$addressMapper = $this->getPluralFieldAddressMapper();
+        //$model->setAddresses($addressMapper->findByEntityId($id));
         
         return $model;
     }
@@ -114,7 +115,7 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
      * TODO please fix me!!!
      * @return \KapitchiBase\Mapper\PluralFieldObjectDbAdapter 
      */
-    protected function getPluralFieldAddressMapper() {
+    /*protected function getPluralFieldAddressMapper() {
         $mapper = new \KapitchiBase\Mapper\PluralFieldObjectDbAdapter();
         $mapper->setDbAdapter($this->getReadAdapter());
         $objectMapper = new \KapitchiLocation\Model\Mapper\AddressDbAdapter();
@@ -122,7 +123,7 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
         $mapper->setObjectMapper($objectMapper);
         $mapper->setTableName('contact_prop_addresses');
         return $mapper;
-    }
+    }*/
     
     protected function getPluralFieldMapper($field) {
         $mapper = new PluralFieldStringDbAdapter();
@@ -134,5 +135,13 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
     
     protected function getContactTable() {
         return $this->getTableGateway($this->tableName);
+    }
+    
+    public function getModelPrototype() {
+        return $this->modelPrototype;
+    }
+
+    public function setModelPrototype(ModelAbstract $modelPrototype) {
+        $this->modelPrototype = $modelPrototype;
     }
 }
