@@ -103,9 +103,11 @@ class ContactDbAdapter extends DbAdapterMapper implements ContactMapper {
 //        return $model;
 //    }
     
-    public function remove(ModelAbstract $contact) {
-        var_dump($contact);
-        exit;
+    public function remove(ModelAbstract $model) {
+        $table = $this->getTableGateway($this->tableName, true);
+        $table->delete(array(
+            'id' => $model->getId()
+        ));
     }
     
     /**
