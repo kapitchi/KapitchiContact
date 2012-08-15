@@ -1,13 +1,35 @@
 <?php
-
 namespace KapitchiContact\Service;
 
-use KapitchiContact\Model\Mapper\Contact as ContactMapper,
-    ZfcBase\Service\ModelServiceAbstract,
-    InvalidArgumentException as NoContactFoundException,
-    KapitchiContact\Model\Contact as ContactModel;
+use KapitchiEntity\Service\EntityService,
+    KapitchiEntity\Model\EntityModelInterface,
+    KapitchiContact\ContactType\ContactTypeManager;
 
-class Contact extends ModelServiceAbstract {
+class Contact extends EntityService
+{
+    protected $typeManager;
     
+    public function loadModel($entity, $options = array(), EntityModelInterface $model = null)
+    {
+        $handle = $entity->getTypeHandle();
+        $type = $this->getTypeManager()->get($handle);
+        $typeInstance = $type->findByContactId($entity->getId());
+        
+        $model = new \KapitchiContact\Model\Contact();
+        $model->setEntity($entity);
+        $model->setTypeInstance($typeInstance);
+        
+        return parent::loadModel($entity, $options, $model);
+    }
     
+    public function getTypeManager()
+    {
+        return $this->typeManager;
+    }
+
+    public function setTypeManager(ContactTypeManager $typeManager)
+    {
+        $this->typeManager = $typeManager;
+    }
+
 }

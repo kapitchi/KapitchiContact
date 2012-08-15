@@ -2,98 +2,50 @@
 
 namespace KapitchiContact\Form;
 
-use ZfcBase\Form\Form,
-    Zend\Form\SubForm;
+use KapitchiBase\Form\EventManagerAwareForm,
+    Zend\Form\Form;
 
-class Contact extends Form {
+class Contact extends EventManagerAwareForm
+{
+    protected $typeManager;
     
-    public function init() {
-        $this->addElement('hidden', 'id');
+    public function __construct($typeManager, $name = null)
+    {
+        parent::__construct($name);
         
-        //name
-        $nameSubForm = new Form();
-        $nameSubForm->addElement('text', 'formatted', array(
-            'label' => 'Formatted name',
-            'readonly' => true
-        ));
-        $nameSubForm->addElement('text', 'givenName', array(
-            'label' => 'First name'
-        ));
-        $nameSubForm->addElement('text', 'middleName', array(
-            'label' => 'Middle name'
-        ));
-        $nameSubForm->addElement('text', 'familyName', array(
-            'label' => 'Surname'
-        ));
-        $nameSubForm->addElement('text', 'honorificPrefix', array(
-            'label' => 'Prefix'
-        ));
-        $nameSubForm->addElement('text', 'honorificSuffix', array(
-            'label' => 'Suffix'
+        $this->setTypeManager($typeManager);
+        
+        $this->setLabel('Contact');
+        $this->add(array(
+            'name' => 'displayName',
+            'options' => array(
+                'label' => 'Display name',
+            ),
+            'attributes' => array(
+                'type' => 'text'
+            ),
         ));
         
-        $this->addSubForm($nameSubForm, 'name');
-        
-        //phoneNumbers
-        $phoneNumberSubForm = new SubForm();
-        foreach(array(
-            'mobile' => 'Mobile number',
-            'work' => 'Work number',
-            'home' => 'Home number') as $type => $numberLabel) {
-            $phoneNumberTypeForm = new SubForm();
-//            $phoneNumberTypeForm->addElement('hidden', 'type', array(
-//                'label' => 'Type'
-//            ));
-            $phoneNumberTypeForm->addElement('checkbox', 'primary', array(
-                'label' => 'Primary'
-            ));
-            $phoneNumberTypeForm->addElement('text', 'value', array(
-                'label' => $numberLabel
-            ));
-            
-            $phoneNumberSubForm->addSubForm($phoneNumberTypeForm, $type);
+        $names = $typeManager->getCanonicalNames();
+        foreach($names as $name) {
+            $type = $typeManager->get($name);
+            $form = $type->getForm('contact');
+            $this->add($form);
         }
-        $this->addSubForm($phoneNumberSubForm, 'phoneNumbers');
-        
-        //emails
-        $emailsSubForm = new SubForm();
-        foreach(array(
-            'personal' => 'Personal email',
-            'work' => 'Work email') as $type => $emailLabel) {
-            $typeForm = new SubForm();
-            //$typeForm->addElement('select', 'type');
-            $typeForm->addElement('checkbox', 'primary', array(
-                'label' => 'Primary'
-            ));
-            $typeForm->addElement('text', 'value', array(
-                'label' => $emailLabel
-            ));
-            
-            $emailsSubForm->addSubForm($typeForm, $type);
-        }
-        $this->addSubForm($emailsSubForm, 'emails');
-        
-        //address
-        /*$addressesSubForm = new SubForm();
-        foreach(array(
-            'personal' => 'Personal address',
-            'work' => 'Work address') as $type => $label) {
-            
-            $typeForm = new SubForm();
-            //$typeForm->addElement('select', 'type');
-            $typeForm->addElement('checkbox', 'primary', array(
-                'label' => 'Primary'
-            ));
-            
-            $addressForm = new \KapitchiLocation\Form\Address();
-            $addressForm->setIsArray(true);
-            $addressForm->removeDecorator('FormDecorator');
-            $typeForm->addSubForm($addressForm, 'value');
-            
-            $addressesSubForm->addSubForm($typeForm, $type);
-        }
-        $this->addSubForm($addressesSubForm, 'addresses');
-        */
-        
     }
+    
+    /**
+     * 
+     * @return \KapitchiContact\ContactType\ContactTypeManager
+     */
+    public function getTypeManager()
+    {
+        return $this->typeManager;
+    }
+
+    public function setTypeManager($typeManager)
+    {
+        $this->typeManager = $typeManager;
+    }
+
 }
