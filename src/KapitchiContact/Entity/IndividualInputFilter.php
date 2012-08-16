@@ -12,6 +12,10 @@ class IndividualInputFilter extends EventManagerAwareInputFilter
     public function __construct()
     {
         $this->add(array(
+            'name'       => 'id',
+            'required'   => false,
+        ));
+        $this->add(array(
             'name'       => 'givenName',
             'required'   => true,
         ));

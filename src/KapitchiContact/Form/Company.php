@@ -11,6 +11,15 @@ class Company extends EventManagerAwareForm
         parent::__construct($name);
         $this->setLabel('Company');
         $this->add(array(
+            'name' => 'id',
+            'options' => array(
+                'label' => 'ID',
+            ),
+            'attributes' => array(
+                'type' => 'hidden'
+            ),
+        ));
+        $this->add(array(
             'name' => 'name',
             'options' => array(
                 'label' => 'Company name',

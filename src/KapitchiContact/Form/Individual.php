@@ -11,6 +11,15 @@ class Individual extends EventManagerAwareForm
         parent::__construct($name);
         $this->setLabel('Individual');
         $this->add(array(
+            'name' => 'id',
+            'options' => array(
+                'label' => 'ID',
+            ),
+            'attributes' => array(
+                'type' => 'hidden'
+            ),
+        ));
+        $this->add(array(
             'name' => 'givenName',
             'options' => array(
                 'label' => 'Given name',
@@ -70,7 +79,7 @@ class Individual extends EventManagerAwareForm
                 'label' => 'Date of birth',
             ),
             'attributes' => array(
-                'type' => 'text'
+                'type' => 'date'
             ),
         ));
         $this->add(array(

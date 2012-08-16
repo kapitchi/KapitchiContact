@@ -29,8 +29,15 @@ class Contact extends EntityService
         
         $instance = $this;
         $this->getEventManager()->attach('persist', function($e) use ($instance) {
-                    var_dump($e);
-                    exit;
+            //TODO mz: What should I do with this? should contact types be implemented using mappers only?
+            $typeManager = $instance->getTypeManager();
+            $data = $e->getParam('data');
+            $typeHandle = $e->getParam('entity')->getTypeHandle();
+            $type = $typeManager->get($typeHandle);
+            $persistData = $data[$typeHandle];
+            $typeEntity = $type->getEntityService()->createEntityFromArray($persistData);
+            $typeEntity->setContactId($e->getParam('entity')->getId());
+            $type->getEntityService()->persist($typeEntity);
         });
     }
     
