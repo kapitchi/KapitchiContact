@@ -9,8 +9,22 @@ use KapitchiBase\InputFilter\EventManagerAwareInputFilter;
  */
 class ContactInputFilter extends EventManagerAwareInputFilter
 {
-    public function __construct()
+    protected $typeManager;
+    
+    public function __construct($typeManager)
     {
+        $this->setTypeManager($typeManager);
+        
+        $this->add(array(
+            'name'       => 'id',
+            'required'   => false,
+        ));
+        
+        $this->add(array(
+            'name'       => 'typeHandle',
+            'required'   => true,
+        ));
+        
         $this->add(array(
             'name'       => 'displayName',
             'required'   => true,
@@ -26,5 +40,37 @@ class ContactInputFilter extends EventManagerAwareInputFilter
                 array('name' => 'StringTrim'),
             ),
         ));
+        
+        $names = $typeManager->getCanonicalNames();
+        foreach($names as $name) {
+            $type = $typeManager->get($name);
+            $form = $type->getForm();
+            //TODO
+            $inputFilter = $form->getInputFilter();
+            $this->add($inputFilter, $name);
+        }
     }
+    
+    protected function attachDefaultListeners() {
+        parent::attachDefaultListeners();
+        $instance = $this;
+        $this->getEventManager()->attach('isValid.pre', function($e) use ($instance) {
+            //mz: sets validation group according typeHandle selected
+            $typeHandle = $instance->getValue('typeHandle');
+            $validationGroup = array('typeHandle', 'displayName');
+            $validationGroup[] = $typeHandle;
+            $instance->setValidationGroup($validationGroup);
+        });
+    }
+    
+    public function getTypeManager()
+    {
+        return $this->typeManager;
+    }
+
+    public function setTypeManager($typeManager)
+    {
+        $this->typeManager = $typeManager;
+    }
+
 }

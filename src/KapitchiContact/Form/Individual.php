@@ -13,7 +13,7 @@ class Individual extends EventManagerAwareForm
         $this->add(array(
             'name' => 'givenName',
             'options' => array(
-                'label' => 'Given Name',
+                'label' => 'Given name',
             ),
             'attributes' => array(
                 'type' => 'text'
@@ -22,7 +22,7 @@ class Individual extends EventManagerAwareForm
         $this->add(array(
             'name' => 'middleName',
             'options' => array(
-                'label' => 'Middle Name',
+                'label' => 'Middle name',
             ),
             'attributes' => array(
                 'type' => 'text'
@@ -31,7 +31,7 @@ class Individual extends EventManagerAwareForm
         $this->add(array(
             'name' => 'familyName',
             'options' => array(
-                'label' => 'Family Name',
+                'label' => 'Family name',
             ),
             'attributes' => array(
                 'type' => 'text'
@@ -40,7 +40,7 @@ class Individual extends EventManagerAwareForm
         $this->add(array(
             'name' => 'maidenName',
             'options' => array(
-                'label' => 'Maiden Name',
+                'label' => 'Maiden name',
             ),
             'attributes' => array(
                 'type' => 'text'
@@ -49,7 +49,7 @@ class Individual extends EventManagerAwareForm
         $this->add(array(
             'name' => 'honorificPrefix',
             'options' => array(
-                'label' => 'Honorific Prefix',
+                'label' => 'Honorific prefix',
             ),
             'attributes' => array(
                 'type' => 'text'
@@ -58,7 +58,7 @@ class Individual extends EventManagerAwareForm
         $this->add(array(
             'name' => 'honorificSuffix',
             'options' => array(
-                'label' => 'Honorific Suffix',
+                'label' => 'Honorific suffix',
             ),
             'attributes' => array(
                 'type' => 'text'

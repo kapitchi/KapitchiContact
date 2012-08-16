@@ -16,6 +16,40 @@ class Contact extends EventManagerAwareForm
         $this->setTypeManager($typeManager);
         
         $this->setLabel('Contact');
+        
+        $names = $typeManager->getCanonicalNames();
+        $typeHandleOptions = array();
+        foreach($names as $name) {
+            $type = $typeManager->get($name);
+            $typeHandleOptions[] = array(
+                'value' => $name,
+                'label' => $type->getName(),
+            );
+            $form = $type->getForm('contact');
+            $this->add($form);
+        }
+        
+        $this->add(array(
+            'name' => 'id',
+            'options' => array(
+                'label' => 'ID',
+            ),
+            'attributes' => array(
+                'type' => 'hidden'
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'typeHandle',
+            'options' => array(
+                'label' => 'Type',
+            ),
+            'attributes' => array(
+                'type' => 'radio',
+                'options' => $typeHandleOptions
+            ),
+        ));
+        
         $this->add(array(
             'name' => 'displayName',
             'options' => array(
@@ -26,12 +60,6 @@ class Contact extends EventManagerAwareForm
             ),
         ));
         
-        $names = $typeManager->getCanonicalNames();
-        foreach($names as $name) {
-            $type = $typeManager->get($name);
-            $form = $type->getForm('contact');
-            $this->add($form);
-        }
     }
     
     /**

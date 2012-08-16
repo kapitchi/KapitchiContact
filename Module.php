@@ -70,7 +70,7 @@ class Module extends AbstractModule implements
                     return $ins;
                 },
                 'KapitchiContact\Form\ContactInputFilter' => function ($sm) {
-                    $ins = new Form\ContactInputFilter();
+                    $ins = new Form\ContactInputFilter($sm->get('KapitchiContact\ContactType\ContactTypeManager'));
                     return $ins;
                 },
                 
@@ -101,6 +101,11 @@ class Module extends AbstractModule implements
                 },
                 'KapitchiContact\Form\Individual' => function ($sm) {
                     $ins = new Form\Individual('individual');
+                    $ins->setInputFilter($sm->get('KapitchiContact\Form\IndividualInputFilter'));
+                    return $ins;
+                },
+                'KapitchiContact\Form\IndividualInputFilter' => function ($sm) {
+                    $ins = new Form\IndividualInputFilter();
                     return $ins;
                 },
                         
@@ -131,6 +136,11 @@ class Module extends AbstractModule implements
                 },
                 'KapitchiContact\Form\Company' => function ($sm) {
                     $ins = new Form\Company('company');
+                    $ins->setInputFilter($sm->get('KapitchiContact\Form\CompanyInputFilter'));
+                    return $ins;
+                },
+                'KapitchiContact\Form\CompanyInputFilter' => function ($sm) {
+                    $ins = new Form\CompanyInputFilter();
                     return $ins;
                 },
             )

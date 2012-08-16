@@ -6,6 +6,7 @@ use KapitchiEntity\Model\GenericEntityModel;
 class Contact extends GenericEntityModel
 {
     protected $typeInstance;
+    protected $type;
     
     public function getTypeInstance()
     {
@@ -15,6 +16,16 @@ class Contact extends GenericEntityModel
     public function setTypeInstance($typeInstance)
     {
         $this->typeInstance = $typeInstance;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
 }

@@ -2,7 +2,8 @@
 return array(
     'plugin_manager' => array(
         'invokables' => array(
-            'Contact/IdentityContact' => 'KapitchiContact\Plugin\IdentityContact'
+            'Contact/IdentityContact' => 'KapitchiContact\Plugin\IdentityContact',
+            'Contact/ContactTypeCompany' => 'KapitchiContact\Plugin\ContactTypeCompany',
         ),
     ),
     'KapitchiContact' => array(
@@ -11,17 +12,17 @@ return array(
                 'individual' => function($sm) {
                     $sl = $sm->getServiceLocator();
                     $ins = new \KapitchiContact\ContactType\Individual();
-                    $ins->setTypeService($sl->get('KapitchiContact\Service\Individual'));
+                    $ins->setEntityService($sl->get('KapitchiContact\Service\Individual'));
                     $ins->setForm($sl->get('KapitchiContact\Form\Individual'));
                     return $ins;
                 },
-                'company' => function($sm) {
-                    $sl = $sm->getServiceLocator();
-                    $ins = new \KapitchiContact\ContactType\Company();
-                    $ins->setTypeService($sl->get('KapitchiContact\Service\Company'));
-                    $ins->setForm($sl->get('KapitchiContact\Form\Company'));
-                    return $ins;
-                },
+//                'company' => function($sm) {
+//                    $sl = $sm->getServiceLocator();
+//                    $ins = new \KapitchiContact\ContactType\Company();
+//                    $ins->setTypeService($sl->get('KapitchiContact\Service\Company'));
+//                    $ins->setForm($sl->get('KapitchiContact\Form\Company'));
+//                    return $ins;
+//                },
             )
         )
     ),

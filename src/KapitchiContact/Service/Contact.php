@@ -16,10 +16,22 @@ class Contact extends EntityService
         $typeInstance = $type->findByContactId($entity->getId());
         
         $model = new \KapitchiContact\Model\Contact();
+        $model->setType($type);
         $model->setEntity($entity);
         $model->setTypeInstance($typeInstance);
         
         return parent::loadModel($entity, $options, $model);
+    }
+    
+    protected function attachDefaultListeners()
+    {
+        parent::attachDefaultListeners();
+        
+        $instance = $this;
+        $this->getEventManager()->attach('persist', function($e) use ($instance) {
+                    var_dump($e);
+                    exit;
+        });
     }
     
     public function getTypeManager()

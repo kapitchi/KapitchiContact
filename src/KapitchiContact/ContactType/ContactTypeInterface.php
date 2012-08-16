@@ -7,6 +7,9 @@ namespace KapitchiContact\ContactType;
  */
 interface ContactTypeInterface
 {
+    public function getName();
     public function findByContactId($contactId);
-    public function getForm($formType);
+    public function getForm($formType = null);
+    public function createArrayFromType($type);
+    public function createTypeFromArray(array $data);
 }

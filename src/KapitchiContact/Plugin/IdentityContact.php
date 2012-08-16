@@ -75,9 +75,11 @@ class IdentityContact implements PluginInterface
             $model = $e->getParam('model');
             $viewModel = $e->getParam('viewModel');
             
+            //TODO
             $contactForm = $form->get('contact');
             if($model->hasExt('ContactModel')) {
                 $contactModel = $model->getExt('ContactModel');
+                //$contactForm->setData($contactModel->);
             }
         });
     }
