@@ -16,12 +16,16 @@ class IndividualInputFilter extends EventManagerAwareInputFilter
             'required'   => false,
         ));
         $this->add(array(
+            'name'       => 'contactId',
+            'required'   => false,
+        ));
+        $this->add(array(
             'name'       => 'givenName',
             'required'   => true,
         ));
         $this->add(array(
             'name'       => 'middleName',
-            'required'   => true,
+            'required'   => false,
         ));
         $this->add(array(
             'name'       => 'familyName',

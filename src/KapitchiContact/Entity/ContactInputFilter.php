@@ -26,6 +26,7 @@ class ContactInputFilter extends EventManagerAwareInputFilter
         $this->add(array(
             'name'       => 'typeHandle',
             'required'   => true,
+            'allow_empty' => false,
         ));
         
         $this->add(array(
@@ -57,10 +58,14 @@ class ContactInputFilter extends EventManagerAwareInputFilter
         parent::attachDefaultListeners();
         $instance = $this;
         $this->getEventManager()->attach('isValid.pre', function($e) use ($instance) {
+            $validationGroup = array('id', 'identityId', 'typeHandle', 'displayName');
+            
             //mz: sets validation group according typeHandle selected
             $typeHandle = $instance->getValue('typeHandle');
-            $validationGroup = array('id', 'identityId', 'typeHandle', 'displayName');
-            $validationGroup[] = $typeHandle;
+            if(!empty($typeHandle)) {
+                $validationGroup[] = $typeHandle;
+            }
+            
             $instance->setValidationGroup($validationGroup);
         });
     }
