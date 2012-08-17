@@ -2,6 +2,7 @@
 namespace KapitchiContact;
 
 use Zend\ModuleManager\Feature\ControllerProviderInterface,
+    Zend\EventManager\EventInterface,
     Zend\ModuleManager\Feature\ServiceProviderInterface,
     KapitchiBase\ModuleManager\AbstractModule,
     KapitchiEntity\Mapper\EntityDbAdapterMapperOptions,
@@ -10,6 +11,15 @@ use Zend\ModuleManager\Feature\ControllerProviderInterface,
 class Module extends AbstractModule implements
     ControllerProviderInterface, ServiceProviderInterface
 {
+    
+    public function onBootstrap(EventInterface $e)
+    {
+        $em = $e->getApplication()->getEventManager();
+        $sm = $e->getApplication()->getServiceManager();
+        
+        
+        
+    }
     
     public function getControllerConfig()
     {

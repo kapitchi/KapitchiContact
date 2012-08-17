@@ -42,9 +42,7 @@ class IdentityContact implements PluginInterface
             if($data && isset($data['contact'])) {
                 $service = $sm->get('KapitchiContact\Service\Contact');
                 $entity = $service->createEntityFromArray($data['contact']);
-                var_dump($entity);
-                exit;
-                $service->persist($entity);
+                $service->persist($entity, $data['contact']);
             }
         });
         $em->getSharedManager()->attach('KapitchiIdentity\Service\Identity', 'loadModel', function($e) use ($sm) {
@@ -62,12 +60,14 @@ class IdentityContact implements PluginInterface
         $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'init', function($e) use ($sm) {
             $form = $e->getTarget();
             $contactForm = $sm->get('KapitchiContact\Form\Contact');
-            $contactForm->remove('displayName');
-            $form->add($contactForm);
+            //$contactForm->remove('displayName');
+            $form->add($contactForm, array(
+                'name' => 'contact'
+            ));
         });
         $em->getSharedManager()->attach('KapitchiIdentity\Form\IdentityInputFilter', 'init', function($e) use ($sm) {
-            //$if = $sm->get('KapitchiContact\Form\ContactInputFilter');
-            //$e->getTarget()->add($if, 'contact');
+            $if = $sm->get('KapitchiContact\Form\ContactInputFilter');
+            $e->getTarget()->add($if, 'contact');
         });
         
         $em->getSharedManager()->attach('KapitchiIdentity\Controller\IdentityController', 'update.post', function($e) use ($sm) {
@@ -75,11 +75,22 @@ class IdentityContact implements PluginInterface
             $model = $e->getParam('model');
             $viewModel = $e->getParam('viewModel');
             
-            //TODO
-            $contactForm = $form->get('contact');
-            if($model->hasExt('ContactModel')) {
-                $contactModel = $model->getExt('ContactModel');
-                //$contactForm->setData($contactModel->);
+            $id = $model->getEntity()->getId();
+            $service = $sm->get('KapitchiContact/Service/Contact');
+            $entity = $service->findOneBy(array(
+                'identityId' => $id
+            ));
+            if($entity) {
+                $contactForm = $form->get('contact');
+                $extModel = $service->loadModel($entity);
+                $typeEntity = $extModel->getTypeInstance();
+                $data = $extModel->getType()->createArrayFromType($typeEntity);
+                $typeHandle = $extModel->getEntity()->getTypeHandle();
+                $typeForm = $contactForm->get($typeHandle);
+                $typeForm->setData($data);
+                $form->setData(array(
+                    'contact' => $service->createArrayFromEntity($entity)
+                ));
             }
         });
     }

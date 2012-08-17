@@ -38,6 +38,15 @@ class Contact extends EventManagerAwareForm
                 'type' => 'hidden'
             ),
         ));
+        $this->add(array(
+            'name' => 'identityId',
+            'options' => array(
+                'label' => 'Identity ID',
+            ),
+            'attributes' => array(
+                'type' => 'hidden'
+            ),
+        ));
         
         $this->add(array(
             'name' => 'typeHandle',

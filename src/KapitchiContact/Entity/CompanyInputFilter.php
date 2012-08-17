@@ -15,6 +15,10 @@ class CompanyInputFilter extends EventManagerAwareInputFilter
             'name'       => 'id',
             'required'   => false,
         ));
+        $this->add(array(
+            'name'       => 'contactId',
+            'required'   => true,
+        ));
         
         $this->add(array(
             'name'       => 'name',
