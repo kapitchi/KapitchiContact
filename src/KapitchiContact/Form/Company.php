@@ -12,20 +12,22 @@ class Company extends EventManagerAwareForm
         $this->setLabel('Company');
         $this->add(array(
             'name' => 'id',
+            'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
                 'label' => 'ID',
             ),
             'attributes' => array(
-                'type' => 'hidden'
+                
             ),
         ));
         $this->add(array(
             'name' => 'name',
+            'type' => 'Zend\Form\Element\Text',
             'options' => array(
                 'label' => 'Company name',
             ),
             'attributes' => array(
-                'type' => 'text'
+                
             ),
             
         ));

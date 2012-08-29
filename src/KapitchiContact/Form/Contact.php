@@ -31,41 +31,41 @@ class Contact extends EventManagerAwareForm
         
         $this->add(array(
             'name' => 'id',
+            'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
                 'label' => 'ID',
             ),
             'attributes' => array(
-                'type' => 'hidden'
             ),
         ));
         $this->add(array(
             'name' => 'identityId',
+            'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
                 'label' => 'Identity ID',
             ),
             'attributes' => array(
-                'type' => 'hidden'
             ),
         ));
         
         $this->add(array(
             'name' => 'typeHandle',
+            'type' => 'Zend\Form\Element\Radio',
             'options' => array(
                 'label' => 'Type',
             ),
             'attributes' => array(
-                'type' => 'radio',
                 'options' => $typeHandleOptions
             ),
         ));
         
         $this->add(array(
             'name' => 'displayName',
+            'type' => 'Zend\Form\Element\Text',
             'options' => array(
                 'label' => 'Display name',
             ),
             'attributes' => array(
-                'type' => 'text'
             ),
         ));
         
