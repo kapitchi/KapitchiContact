@@ -28,7 +28,7 @@ return array(
     ),
     'router' => array(
         'routes' => array(
-            'kapitchi-contact' => array(
+            'contact' => array(
                 'type'    => 'Literal',
                 'options' => array(
                     'route'    => '/contact',
