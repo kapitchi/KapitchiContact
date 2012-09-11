@@ -8,7 +8,7 @@ use Zend\EventManager\EventInterface,
  *
  * @author Matus Zeman <mz@kapitchi.com>
  */
-class IdentityContact implements PluginInterface
+class KapitchiIdentity implements PluginInterface
 {
     
     public function getAuthor()

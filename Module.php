@@ -43,6 +43,7 @@ class Module extends AbstractModule implements
         return array(
             'invokables' => array(
                 'KapitchiContact\Entity\Contact' => 'KapitchiContact\Entity\Contact',
+                'KapitchiContact\Entity\ContactAddress' => 'KapitchiContact\Entity\ContactAddress',
                 'KapitchiContact\Entity\Individual' => 'KapitchiContact\Entity\Individual',
                 'KapitchiContact\Entity\Company' => 'KapitchiContact\Entity\Company',
             ),
@@ -106,8 +107,7 @@ class Module extends AbstractModule implements
                     );
                 },
                 'KapitchiContact\Entity\IndividualHydrator' => function ($sm) {
-                    //needed here because hydrator tranforms camelcase to underscore
-                    return new \Zend\Stdlib\Hydrator\ClassMethods(false);
+                    return new Entity\IndividualHydrator(false);
                 },
                 'KapitchiContact\Form\Individual' => function ($sm) {
                     $ins = new Form\Individual('individual');
@@ -151,6 +151,38 @@ class Module extends AbstractModule implements
                 },
                 'KapitchiContact\Form\CompanyInputFilter' => function ($sm) {
                     $ins = new Form\CompanyInputFilter();
+                    return $ins;
+                },
+                //ContactAddress
+                'KapitchiContact\Service\ContactAddress' => function ($sm) {
+                    $s = new \KapitchiEntity\Service\EntityService(
+                        $sm->get('KapitchiContact\Mapper\ContactAddressDbAdapter'),
+                        $sm->get('KapitchiContact\Entity\ContactAddress'),
+                        $sm->get('KapitchiContact\Entity\ContactAddressHydrator')
+                    );
+                    return $s;
+                },
+                'KapitchiContact\Mapper\ContactAddressDbAdapter' => function ($sm) {
+                    return new EntityDbAdapterMapper(
+                        $sm->get('Zend\Db\Adapter\Adapter'),
+                        new EntityDbAdapterMapperOptions(array(
+                            'tableName' => 'contact_address',
+                            'primaryKey' => 'id',
+                            'hydrator' => $sm->get('KapitchiContact\Entity\ContactAddressHydrator'),
+                            'entityPrototype' => $sm->get('KapitchiContact\Entity\ContactAddress'),
+                        ))
+                    );
+                },
+                'KapitchiContact\Entity\ContactAddressHydrator' => function ($sm) {
+                    return new \Zend\Stdlib\Hydrator\ClassMethods(false);
+                },
+                'KapitchiContact\Form\ContactAddress' => function ($sm) {
+                    $ins = new Form\ContactAddress();
+                    $ins->setInputFilter($sm->get('KapitchiContact\Form\ContactAddressInputFilter'));
+                    return $ins;
+                },
+                'KapitchiContact\Form\ContactAddressInputFilter' => function ($sm) {
+                    $ins = new Form\ContactAddressInputFilter();
                     return $ins;
                 },
             )

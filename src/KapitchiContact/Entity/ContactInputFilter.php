@@ -54,12 +54,21 @@ class ContactInputFilter extends EventManagerAwareInputFilter
         }
     }
     
+    /**
+     * @return array 
+     */
+    public function getValidationGroup() {
+        if($this->validationGroup === null) {
+            $this->validationGroup = array('id', 'identityId', 'typeHandle', 'displayName');
+        }
+        return $this->validationGroup;
+    }
+    
     protected function attachDefaultListeners() {
         parent::attachDefaultListeners();
         $instance = $this;
         $this->getEventManager()->attach('isValid.pre', function($e) use ($instance) {
-            $validationGroup = array('id', 'identityId', 'typeHandle', 'displayName');
-            
+            $validationGroup = $instance->getValidationGroup();
             //mz: sets validation group according typeHandle selected
             $typeHandle = $instance->getValue('typeHandle');
             if(!empty($typeHandle)) {
