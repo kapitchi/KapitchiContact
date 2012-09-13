@@ -22,6 +22,9 @@ class ContactInputFilter extends EventManagerAwareInputFilter
         $this->add(array(
             'name'       => 'identityId',
             'required'   => false,
+            'filters'   => array(
+                array('name' => 'Null'),
+            ),
         ));
         $this->add(array(
             'name'       => 'typeHandle',
