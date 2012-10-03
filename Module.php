@@ -4,12 +4,15 @@ namespace KapitchiContact;
 use Zend\ModuleManager\Feature\ControllerProviderInterface,
     Zend\EventManager\EventInterface,
     Zend\ModuleManager\Feature\ServiceProviderInterface,
+    Zend\ModuleManager\Feature\ViewHelperProviderInterface,
     KapitchiBase\ModuleManager\AbstractModule,
     KapitchiEntity\Mapper\EntityDbAdapterMapperOptions,
     KapitchiEntity\Mapper\EntityDbAdapterMapper;
 
 class Module extends AbstractModule implements
-    ControllerProviderInterface, ServiceProviderInterface
+    ControllerProviderInterface,
+    ServiceProviderInterface,
+    ViewHelperProviderInterface
 {
     
     public function onBootstrap(EventInterface $e)
@@ -33,6 +36,30 @@ class Module extends AbstractModule implements
                     $cont->setEntityService($sm->getServiceLocator()->get('KapitchiContact\Service\Contact'));
                     $cont->setEntityForm($sm->getServiceLocator()->get('KapitchiContact\Form\Contact'));
                     return $cont;
+                },
+                //API
+                'KapitchiContact\Controller\Api\Contact' => function($sm) {
+                    $cont = new Controller\Api\ContactRestfulController(
+                        $sm->getServiceLocator()->get('KapitchiContact\Service\Contact')
+                    );
+                    return $cont;
+                },
+            )
+        );
+    }
+    
+    public function getViewHelperConfig()
+    {
+        return array(
+            'invokables' => array(
+                //'KapitchiIdentity\Controller\Identity' => 'KapitchiIdentity\Controller\IdentityController',
+            ),
+            'factories' => array(
+                'contact' => function($sm) {
+                    $ins = new View\Helper\Contact(
+                        $sm->getServiceLocator()->get('KapitchiContact\Service\Contact')
+                    );
+                    return $ins;
                 },
             )
         );
@@ -196,4 +223,5 @@ class Module extends AbstractModule implements
     public function getNamespace() {
         return __NAMESPACE__;
     }
+
 }
