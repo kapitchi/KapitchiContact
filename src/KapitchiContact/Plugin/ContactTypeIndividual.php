@@ -7,7 +7,7 @@ use Zend\EventManager\EventInterface,
  *
  * @author Matus Zeman <mz@kapitchi.com>
  */
-class ContactTypeCompany implements PluginInterface
+class ContactTypeIndividual implements PluginInterface
 {
     public function getAuthor()
     {
@@ -16,12 +16,12 @@ class ContactTypeCompany implements PluginInterface
 
     public function getDescription()
     {
-        return "Adds 'company' contact type.";
+        return "Adds 'individual' contact type.";
     }
 
     public function getName()
     {
-        return '[KapitchiContact] Company contact type';
+        return '[KapitchiContact] Individual contact type';
     }
 
     public function getVersion()
@@ -40,42 +40,42 @@ class ContactTypeCompany implements PluginInterface
             $typeHandleEl = $form->get('typeHandle');
             $opts = $typeHandleEl->getValueOptions();
             $opts[] = array(
-                'label' => 'Company',
-                'value' => 'company',
+                'label' => 'Individual',
+                'value' => 'individual',
             );
             $typeHandleEl->setValueOptions($opts);
             
-            $form->add($sm->get('KapitchiContact\Form\Company'), array(
-                'name' => 'company'
+            $form->add($sm->get('KapitchiContact\Form\Individual'), array(
+                'name' => 'individual'
             ));
         });
         
         $sharedEm->attach('KapitchiContact\Element\ContactInputFilter', 'init', function($e) use ($sm) {
             $ins = $e->getTarget();
-            $ins->add($sm->get('KapitchiContact\Element\CompanyInputFilter'), 'company');
+            $ins->add($sm->get('KapitchiContact\Element\IndividualInputFilter'), 'individual');
         });
         
         $sharedEm->attach('KapitchiContact\Controller\ContactController', 'update.post', function($e) use ($sm) {
             $form = $e->getParam('form');
             $entity = $e->getParam('entity');
             
-            $companyForm = $form->get('company');
-            $companyService = $sm->get('KapitchiContact\Service\Company');
-            $company = $companyService->findOneBy(array(
+            $typeForm = $form->get('individual');
+            $typeService = $sm->get('KapitchiContact\Service\Individual');
+            $typeEntity = $typeService->findOneBy(array(
                 'contactId' => $entity->getId()
             ));
-            if($company) {
-                $companyForm->setData($companyService->createArrayFromEntity($company));
+            if($typeEntity) {
+                $typeForm->setData($typeService->createArrayFromEntity($typeEntity));
             }
         });
         
         $sharedEm->attach('KapitchiContact\Service\Contact', 'persist', function($e) use ($sm) {
             $data = $e->getParam('data');
-            if(isset($data['company'])) {
-                $companyService = $sm->get('KapitchiContact\Service\Company');
-                $company = $companyService->createEntityFromArray($data['company']);
+            if(isset($data['individual'])) {
+                $companyService = $sm->get('KapitchiContact\Service\Individual');
+                $company = $companyService->createEntityFromArray($data['individual']);
                 $company->setContactId($e->getParam('entity')->getId());
-                $companyService->persist($company, $data['company']);
+                $companyService->persist($company, $data['individual']);
             }
         });
         

@@ -3,6 +3,7 @@ return array(
     'plugin_manager' => array(
         'invokables' => array(
             'Contact/KapitchiIdentity' => 'KapitchiContact\Plugin\KapitchiIdentity',
+            'Contact/ContactTypeIndividual' => 'KapitchiContact\Plugin\ContactTypeIndividual',
             'Contact/ContactTypeCompany' => 'KapitchiContact\Plugin\ContactTypeCompany',
             'Contact/KapitchiLocation' => 'KapitchiContact\Plugin\KapitchiLocation',
             'Contact/KapitchiLucene' => 'KapitchiContact\Plugin\KapitchiLucene',

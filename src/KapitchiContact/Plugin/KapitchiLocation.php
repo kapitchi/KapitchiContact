@@ -40,8 +40,8 @@ class KapitchiLocation implements PluginInterface
         //loads address into contact form
         $sharedEm->attach('KapitchiContact\Controller\ContactController', 'update.post', function($e) use ($sm) {
             $form = $e->getParam('form');
-            $model = $e->getParam('model');
-            $contactId = $model->getEntity()->getId();
+            $entity = $e->getParam('entity');
+            $contactId = $entity->getId();
             $addressForm = $form->get('addresses')->get('default');
             
             //TODO this works with one address only
@@ -101,15 +101,6 @@ class KapitchiLocation implements PluginInterface
             
             $e->getTarget()->add($addressesInputFilter, 'addresses');
         });
-        
-        //TODO this is needed here as contact input filter sets validation group by default
-        $em->getSharedManager()->attach('KapitchiContact\Form\ContactInputFilter', 'isValid.pre', function($e) {
-            $inputFilter = $e->getTarget();
-            $validGroup = $inputFilter->getValidationGroup();
-            $validGroup[] = 'addresses';
-            $inputFilter->setValidationGroup($validGroup);
-        });
-        
         
         //Address extension
         $em->getSharedManager()->attach('KapitchiLocation\Service\Address', 'persist', function($e) use ($sm) {

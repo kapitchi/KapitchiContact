@@ -75,8 +75,6 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Entity\Company' => 'KapitchiContact\Entity\Company',
             ),
             'factories' => array(
-                'KapitchiContact\ContactType\ContactTypeManager' => 'KapitchiContact\ContactType\ContactTypeManagerFactory',
-                
                 //Contact
                 'KapitchiContact\Service\Contact' => function ($sm) {
                     $s = new Service\Contact(
@@ -84,7 +82,6 @@ class Module extends AbstractModule implements
                         $sm->get('KapitchiContact\Entity\Contact'),
                         $sm->get('KapitchiContact\Entity\ContactHydrator')
                     );
-                    $s->setTypeManager($sm->get('KapitchiContact\ContactType\ContactTypeManager'));
                     return $s;
                 },
                 'KapitchiContact\Mapper\ContactDbAdapter' => function ($sm) {
@@ -103,12 +100,12 @@ class Module extends AbstractModule implements
                     return new \Zend\Stdlib\Hydrator\ClassMethods(false);
                 },
                 'KapitchiContact\Form\Contact' => function ($sm) {
-                    $ins = new Form\Contact($sm->get('KapitchiContact\ContactType\ContactTypeManager'), 'contact');
+                    $ins = new Form\Contact('contact');
                     $ins->setInputFilter($sm->get('KapitchiContact\Form\ContactInputFilter'));
                     return $ins;
                 },
                 'KapitchiContact\Form\ContactInputFilter' => function ($sm) {
-                    $ins = new Form\ContactInputFilter($sm->get('KapitchiContact\ContactType\ContactTypeManager'));
+                    $ins = new Form\ContactInputFilter();
                     return $ins;
                 },
                 
@@ -182,7 +179,7 @@ class Module extends AbstractModule implements
                 },
                 //ContactAddress
                 'KapitchiContact\Service\ContactAddress' => function ($sm) {
-                    $s = new \KapitchiEntity\Service\EntityService(
+                    $s = new Service\ContactAddress(
                         $sm->get('KapitchiContact\Mapper\ContactAddressDbAdapter'),
                         $sm->get('KapitchiContact\Entity\ContactAddress'),
                         $sm->get('KapitchiContact\Entity\ContactAddressHydrator')

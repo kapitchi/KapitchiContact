@@ -9,12 +9,8 @@ use KapitchiBase\InputFilter\EventManagerAwareInputFilter;
  */
 class ContactInputFilter extends EventManagerAwareInputFilter
 {
-    protected $typeManager;
-    
-    public function __construct($typeManager)
+    public function __construct()
     {
-        $this->setTypeManager($typeManager);
-        
         $this->add(array(
             'name'       => 'id',
             'required'   => false,
@@ -48,48 +44,39 @@ class ContactInputFilter extends EventManagerAwareInputFilter
             ),
         ));
         
-        $names = $typeManager->getCanonicalNames();
-        foreach($names as $name) {
-            $type = $typeManager->get($name);
-            $form = $type->getForm();
-            $inputFilter = $form->getInputFilter();
-            $this->add($inputFilter, $name);
-        }
+//        
+//        $names = $typeManager->getCanonicalNames();
+//        foreach($names as $name) {
+//            $type = $typeManager->get($name);
+//            $form = $type->getForm();
+//            $inputFilter = $form->getInputFilter();
+//            $this->add($inputFilter, $name);
+//        }
     }
     
     /**
      * @return array 
      */
-    public function getValidationGroup() {
-        if($this->validationGroup === null) {
-            $this->validationGroup = array('id', 'identityId', 'typeHandle', 'displayName');
-        }
-        return $this->validationGroup;
-    }
+//    public function getValidationGroup() {
+//        if($this->validationGroup === null) {
+//            $this->validationGroup = array('id', 'identityId', 'typeHandle', 'displayName');
+//        }
+//        return $this->validationGroup;
+//    }
+//    
+//    protected function attachDefaultListeners() {
+//        parent::attachDefaultListeners();
+//        $instance = $this;
+//        $this->getEventManager()->attach('isValid.pre', function($e) use ($instance) {
+//            $validationGroup = $instance->getValidationGroup();
+//            //mz: sets validation group according typeHandle selected
+//            $typeHandle = $instance->getValue('typeHandle');
+//            if(!empty($typeHandle)) {
+//                $validationGroup[] = $typeHandle;
+//            }
+//            
+//            $instance->setValidationGroup($validationGroup);
+//        });
+//    }
     
-    protected function attachDefaultListeners() {
-        parent::attachDefaultListeners();
-        $instance = $this;
-        $this->getEventManager()->attach('isValid.pre', function($e) use ($instance) {
-            $validationGroup = $instance->getValidationGroup();
-            //mz: sets validation group according typeHandle selected
-            $typeHandle = $instance->getValue('typeHandle');
-            if(!empty($typeHandle)) {
-                $validationGroup[] = $typeHandle;
-            }
-            
-            $instance->setValidationGroup($validationGroup);
-        });
-    }
-    
-    public function getTypeManager()
-    {
-        return $this->typeManager;
-    }
-
-    public function setTypeManager($typeManager)
-    {
-        $this->typeManager = $typeManager;
-    }
-
 }

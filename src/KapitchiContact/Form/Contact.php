@@ -2,32 +2,15 @@
 
 namespace KapitchiContact\Form;
 
-use KapitchiBase\Form\EventManagerAwareForm,
-    Zend\Form\Form;
+use KapitchiBase\Form\EventManagerAwareForm;
 
 class Contact extends EventManagerAwareForm
 {
-    protected $typeManager;
-    
-    public function __construct($typeManager, $name = null)
+    public function __construct($name = null)
     {
         parent::__construct($name);
         
-        $this->setTypeManager($typeManager);
-        
         $this->setLabel('Contact');
-        
-        $names = $typeManager->getCanonicalNames();
-        $typeHandleOptions = array();
-        foreach($names as $name) {
-            $type = $typeManager->get($name);
-            $typeHandleOptions[] = array(
-                'value' => $name,
-                'label' => $type->getName(),
-            );
-            $form = $type->getForm('contact');
-            $this->add($form);
-        }
         
         $this->add(array(
             'name' => 'id',
@@ -55,7 +38,7 @@ class Contact extends EventManagerAwareForm
                 'label' => 'Type',
             ),
             'attributes' => array(
-                'options' => $typeHandleOptions
+                
             ),
         ));
         
@@ -71,18 +54,4 @@ class Contact extends EventManagerAwareForm
         
     }
     
-    /**
-     * 
-     * @return \KapitchiContact\ContactType\ContactTypeManager
-     */
-    public function getTypeManager()
-    {
-        return $this->typeManager;
-    }
-
-    public function setTypeManager($typeManager)
-    {
-        $this->typeManager = $typeManager;
-    }
-
 }
