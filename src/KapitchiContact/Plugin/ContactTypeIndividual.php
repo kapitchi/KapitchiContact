@@ -50,22 +50,36 @@ class ContactTypeIndividual implements PluginInterface
             ));
         });
         
+        $sharedEm->attach('KapitchiContact\Form\Contact', 'setData', function($e) use ($sm) {
+            $form = $e->getTarget();
+            $data = $e->getParam('data');
+            
+            if(empty($data['individual'])) {
+                $id = $form->get('id')->getValue();
+                $pluginService = $sm->get('KapitchiContact\Service\Individual');
+                $entity = $pluginService->findOneBy(array(
+                    'contactId' => $id
+                ));
+                if($entity) {
+                    $pluginForm = $form->get('individual');
+                    $pluginForm->setData($pluginService->createArrayFromEntity($entity));
+                }
+            }
+        });
+        
         $sharedEm->attach('KapitchiContact\Element\ContactInputFilter', 'init', function($e) use ($sm) {
             $ins = $e->getTarget();
             $ins->add($sm->get('KapitchiContact\Element\IndividualInputFilter'), 'individual');
         });
         
-        $sharedEm->attach('KapitchiContact\Controller\ContactController', 'update.post', function($e) use ($sm) {
-            $form = $e->getParam('form');
-            $entity = $e->getParam('entity');
-            
-            $typeForm = $form->get('individual');
-            $typeService = $sm->get('KapitchiContact\Service\Individual');
-            $typeEntity = $typeService->findOneBy(array(
-                'contactId' => $entity->getId()
-            ));
-            if($typeEntity) {
-                $typeForm->setData($typeService->createArrayFromEntity($typeEntity));
+        $sharedEm->attach('KapitchiContact\Form\ContactInputFilter', 'isValid.pre', function($e) use ($sm) {
+            $ins = $e->getTarget();
+            if($ins->getRawValue('typeHandle') != 'individual') {
+                $group = $ins->getValidationGroup();
+                if(($key = array_search('individual', $group)) !== false) {
+                    unset($group[$key]);
+                    $ins->setValidationGroup($group);
+                }
             }
         });
         

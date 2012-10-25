@@ -20,24 +20,10 @@ class ContactController extends AbstractEntityController
         ));
     }
     
-    protected function attachDefaultListeners()
+    public function lookupAction()
     {
-        parent::attachDefaultListeners();
-        
-        $events = $this->getEventManager();
-        $instance = $this;
-        
-        $events->attach('update.post', function($e) use ($instance) {
-//            $viewModel = $e->getParam('viewModel');
-//            $form = $viewModel->form;
-//            $model = $viewModel->model;
-//            
-//            $type = $model->getTypeInstance();
-//            $data = $model->getType()->createArrayFromType($type);
-//            $typeForm = $form->get($model->getEntity()->getTypeHandle());
-//            $typeForm->setData($data);
-        });
-        
+        return array(
+            'iframeCallerId' => $this->getRequest()->getQuery()->get('iframeCallerId')
+        );
     }
-    
 }

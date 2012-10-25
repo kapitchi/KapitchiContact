@@ -49,6 +49,7 @@ class Contact extends EventManagerAwareForm
                 'label' => 'Display name',
             ),
             'attributes' => array(
+                
             ),
         ));
         

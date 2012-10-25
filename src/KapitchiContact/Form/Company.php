@@ -32,6 +32,18 @@ class Company extends EventManagerAwareForm
             
         ));
         
+        $this->add(array(
+            'name' => 'primaryContactId',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => 'Primary contact',
+            ),
+            'attributes' => array(
+                'data-kap-ui' => 'contact-lookup-input',
+            ),
+            
+        ));
+        
     }
     
 }

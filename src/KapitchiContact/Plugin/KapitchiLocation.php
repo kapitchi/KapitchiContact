@@ -37,24 +37,45 @@ class KapitchiLocation implements PluginInterface
         $sm = $e->getApplication()->getServiceManager();
         $sharedEm = $em->getSharedManager();
         
+        $sharedEm->attach('KapitchiContact\Controller\ContactController', array('update.pre'), function($e) use ($sm) {
+            $form = $e->getParam('form');
+            $entity = $e->getParam('entity');
+            
+            $addressesForm = new \Zend\Form\Fieldset();
+
+            $contactAddressService = $sm->get('KapitchiContact\Service\ContactAddress');
+            $contactAddresses = $contactAddressService->getPaginator(array(
+                'contactId' => $entity->getId()
+            ));
+
+            foreach($contactAddresses->getCurrentItems() as $contactAddress) {
+                $addressesForm->add($sm->get('KapitchiContact\Form\ContactAddress'), array(
+                    'name' => $contactAddress->getTypeHandle()
+                ));
+            }
+
+            $form->add($addressesForm, array(
+                'name' => 'contactAddresses',
+                'priority' => 100,
+            ));
+            
+        });
+        
         //loads address into contact form
         $sharedEm->attach('KapitchiContact\Controller\ContactController', 'update.post', function($e) use ($sm) {
             $form = $e->getParam('form');
             $entity = $e->getParam('entity');
             $contactId = $entity->getId();
-            $addressForm = $form->get('addresses')->get('default');
             
-            //TODO this works with one address only
-            $service = $sm->get('KapitchiContact\Service\ContactAddress');
-            $contactAddress = $service->findOneBy(array(
-                'contactId' => $contactId
+            $contactAddressService = $sm->get('KapitchiContact\Service\ContactAddress');
+            $contactAddresses = $contactAddressService->getPaginator(array(
+                'contactId' => $entity->getId()
             ));
-            if($contactAddress) {
-                $addressService = $sm->get('KapitchiLocation\Service\Address');
-                $address = $addressService->find($contactAddress->getAddressId());
-                $addressData = $addressService->createArrayFromEntity($address);
-                $addressData['contactAddress'] = $service->createArrayFromEntity($contactAddress);
-                $addressForm->setData($addressData);
+            
+            $contactAddressesForm = $form->get('contactAddresses');
+            foreach($contactAddresses->getCurrentItems() as $contactAddress) {
+                $contactAddressForm = $contactAddressesForm->get($contactAddress->getTypeHandle());
+                $contactAddressForm->setData($contactAddressService->createArrayFromEntity($contactAddress));
             }
         });
         
@@ -102,33 +123,33 @@ class KapitchiLocation implements PluginInterface
             $e->getTarget()->add($addressesInputFilter, 'addresses');
         });
         
-        //Address extension
-        $em->getSharedManager()->attach('KapitchiLocation\Service\Address', 'persist', function($e) use ($sm) {
-            $data = $e->getParam('data', false);
-            if($data && isset($data['contactAddress'])) {
-                $address = $e->getParam('entity');
-                $service = $sm->get('KapitchiContact\Service\ContactAddress');
-                $entity = $service->createEntityFromArray($data['contactAddress']);
-                $entity->setAddressId($address->getId());
-                $entity->setTypeHandle('default');
-                $event = $service->persist($entity);
-                $e->setParam('contactAddressEvent', $event);
-            }
-        });
-        
-        $em->getSharedManager()->attach('KapitchiLocation\Form\Address', 'init', function($e) use ($sm) {
-            $form = $e->getTarget();
-            $contactAddressForm = $sm->get('KapitchiContact\Form\ContactAddress');
-            $form->add(clone $contactAddressForm, array(
-                'priority' => 100,
-                'name' => 'contactAddress'
-            ));
-        });
-        
-        $em->getSharedManager()->attach('KapitchiLocation\Form\AddressInputFilter', 'init', function($e) use ($sm) {
-            $addressInputFilter = $e->getTarget();
-            $addressInputFilter->add($sm->get('KapitchiContact\Form\ContactAddressInputFilter'), 'contactAddress');
-        });
+//        //Address extension
+//        $em->getSharedManager()->attach('KapitchiLocation\Service\Address', 'persist', function($e) use ($sm) {
+//            $data = $e->getParam('data', false);
+//            if($data && isset($data['contactAddress'])) {
+//                $address = $e->getParam('entity');
+//                $service = $sm->get('KapitchiContact\Service\ContactAddress');
+//                $entity = $service->createEntityFromArray($data['contactAddress']);
+//                $entity->setAddressId($address->getId());
+//                $entity->setTypeHandle('default');
+//                $event = $service->persist($entity);
+//                $e->setParam('contactAddressEvent', $event);
+//            }
+//        });
+//        
+//        $em->getSharedManager()->attach('KapitchiLocation\Form\Address', 'init', function($e) use ($sm) {
+//            $form = $e->getTarget();
+//            $contactAddressForm = $sm->get('KapitchiContact\Form\ContactAddress');
+//            $form->add(clone $contactAddressForm, array(
+//                'priority' => 100,
+//                'name' => 'contactAddress'
+//            ));
+//        });
+//        
+//        $em->getSharedManager()->attach('KapitchiLocation\Form\AddressInputFilter', 'init', function($e) use ($sm) {
+//            $addressInputFilter = $e->getTarget();
+//            $addressInputFilter->add($sm->get('KapitchiContact\Form\ContactAddressInputFilter'), 'contactAddress');
+//        });
         
         
     }

@@ -46,18 +46,7 @@ class KapitchiIdentity implements PluginInterface
                 $service->persist($entity, $data['contact']);
             }
         });
-        $em->getSharedManager()->attach('KapitchiIdentity\Service\Identity', 'loadModel', function($e) use ($sm) {
-            $model = $e->getParam('model');
-            $id = $model->getEntity()->getId();
-            $service = $sm->get('KapitchiContact/Service/Contact');
-            $contact = $service->findOneBy(array(
-                'identityId' => $id
-            ));
-            if($contact) {
-                $contactModel = $service->loadModel($contact);
-                $model->setExt('contact-model', $contactModel);
-            }
-        });
+        
         $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'init', function($e) use ($sm) {
             $form = $e->getTarget();
             $contactForm = $sm->get('KapitchiContact\Form\Contact');
@@ -69,34 +58,29 @@ class KapitchiIdentity implements PluginInterface
             //$form->get('displayName')->setAttribute('readonly', true);
             //$contactForm->remove('displayName');
         });
+        
+        $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'setData', function($e) use ($sm) {
+            $form = $e->getTarget('form');
+            $data = $e->getParam('data');
+            
+            if(empty($data['contact'])) {
+                $id = $form->get('id')->getValue();
+                $service = $sm->get('KapitchiContact/Service/Contact');
+                $entity = $service->findOneBy(array(
+                    'identityId' => $id
+                ));
+                if($entity) {
+                    $contactForm = $form->get('contact');
+                    $contactForm->setData($service->createArrayFromEntity($entity));
+                }
+            }
+        });
+        
         $em->getSharedManager()->attach('KapitchiIdentity\Form\IdentityInputFilter', 'init', function($e) use ($sm) {
             $if = $sm->get('KapitchiContact\Form\ContactInputFilter');
             $e->getTarget()->add($if, 'contact');
         });
         
-        $em->getSharedManager()->attach('KapitchiIdentity\Controller\IdentityController', 'update.post', function($e) use ($sm) {
-            $form = $e->getParam('form');
-            $model = $e->getParam('model');
-            $viewModel = $e->getParam('viewModel');
-            
-            $id = $model->getEntity()->getId();
-            $service = $sm->get('KapitchiContact/Service/Contact');
-            $entity = $service->findOneBy(array(
-                'identityId' => $id
-            ));
-            if($entity) {
-                $contactForm = $form->get('contact');
-                $extModel = $service->loadModel($entity);
-                $typeEntity = $extModel->getTypeInstance();
-                $data = $extModel->getType()->createArrayFromType($typeEntity);
-                $typeHandle = $extModel->getEntity()->getTypeHandle();
-                $typeForm = $contactForm->get($typeHandle);
-                $typeForm->setData($data);
-                $form->setData(array(
-                    'contact' => $service->createArrayFromEntity($entity)
-                ));
-            }
-        });
     }
     
 }

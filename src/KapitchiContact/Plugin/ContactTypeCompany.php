@@ -50,24 +50,39 @@ class ContactTypeCompany implements PluginInterface
             ));
         });
         
+        $sharedEm->attach('KapitchiContact\Form\Contact', 'setData', function($e) use ($sm) {
+            $form = $e->getTarget();
+            $data = $e->getParam('data');
+            
+            if(empty($data['company'])) {
+                $id = $form->get('id')->getValue();
+                $pluginService = $sm->get('KapitchiContact\Service\Company');
+                $entity = $pluginService->findOneBy(array(
+                    'contactId' => $id
+                ));
+                if($entity) {
+                    $companyForm = $form->get('company');
+                    $companyForm->setData($pluginService->createArrayFromEntity($entity));
+                }
+            }
+        });
+        
+        $sharedEm->attach('KapitchiContact\Form\ContactInputFilter', 'isValid.pre', function($e) use ($sm) {
+            $ins = $e->getTarget();
+            if($ins->getRawValue('typeHandle') != 'company') {
+                $group = $ins->getValidationGroup();
+                if(($key = array_search('company', $group)) !== false) {
+                    unset($group[$key]);
+                    $ins->setValidationGroup($group);
+                }
+            }
+        });
+        
         $sharedEm->attach('KapitchiContact\Element\ContactInputFilter', 'init', function($e) use ($sm) {
             $ins = $e->getTarget();
             $ins->add($sm->get('KapitchiContact\Element\CompanyInputFilter'), 'company');
         });
         
-        $sharedEm->attach('KapitchiContact\Controller\ContactController', 'update.post', function($e) use ($sm) {
-            $form = $e->getParam('form');
-            $entity = $e->getParam('entity');
-            
-            $companyForm = $form->get('company');
-            $companyService = $sm->get('KapitchiContact\Service\Company');
-            $company = $companyService->findOneBy(array(
-                'contactId' => $entity->getId()
-            ));
-            if($company) {
-                $companyForm->setData($companyService->createArrayFromEntity($company));
-            }
-        });
         
         $sharedEm->attach('KapitchiContact\Service\Contact', 'persist', function($e) use ($sm) {
             $data = $e->getParam('data');

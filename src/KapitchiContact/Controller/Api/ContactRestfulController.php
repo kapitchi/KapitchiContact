@@ -46,4 +46,25 @@ class ContactRestfulController extends EntityRestfulController
         ));
         return $jsonModel;
     }
+    
+    protected function attachDefaultListeners()
+    {
+        parent::attachDefaultListeners();
+        
+        $em = $this->getEventManager();
+        $instance = $this;
+        
+        $em->attach('get.post', function($e) {
+            if($e->getTarget()->getRequest()->getQuery()->get('context') == 'entity-lookup-input') {
+                $model = $e->getParam('jsonViewModel');
+                $entity = $model->getVariable('entity');
+                $label = $entity['displayName'];
+                
+                $e->getParam('jsonViewModel')->entityLookupInput = array(
+                    'label' => $label,
+                    'id' => $entity['id']
+                );
+            }
+        });
+    }
 }

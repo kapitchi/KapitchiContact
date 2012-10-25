@@ -29,16 +29,6 @@ class ContactAddress extends EventManagerAwareForm
         ));
         
         $this->add(array(
-            'name' => 'addressId',
-            'type' => 'Zend\Form\Element\Hidden',
-            'options' => array(
-                'label' => 'Address ID',
-            ),
-            'attributes' => array(
-            ),
-        ));
-        
-        $this->add(array(
             'name' => 'typeHandle',
             'type' => 'Zend\Form\Element\Select',
             'options' => array(
@@ -49,6 +39,16 @@ class ContactAddress extends EventManagerAwareForm
             ),
         ));
         
+        $this->add(array(
+            'name' => 'addressId',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => 'Address',
+            ),
+            'attributes' => array(
+                'data-kap-ui' => 'address-lookup-input',
+            ),
+        ));
         
     }
     
