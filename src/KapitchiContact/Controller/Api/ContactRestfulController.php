@@ -60,10 +60,7 @@ class ContactRestfulController extends EntityRestfulController
                 $entity = $model->getVariable('entity');
                 $label = $entity['displayName'];
                 
-                $e->getParam('jsonViewModel')->entityLookupInput = array(
-                    'label' => $label,
-                    'id' => $entity['id']
-                );
+                $e->getParam('jsonViewModel')->label = $label;
             }
         });
     }
