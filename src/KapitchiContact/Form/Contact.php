@@ -23,12 +23,15 @@ class Contact extends EventManagerAwareForm
         ));
         $this->add(array(
             'name' => 'identityId',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Identity ID',
+                'label' => 'Identity',
             ),
             'attributes' => array(
+                'data-kap-ui' => 'identity-lookup-input'
             ),
+        ), array(
+            'priority' => -100,
         ));
         
         $this->add(array(

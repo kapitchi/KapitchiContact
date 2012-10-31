@@ -36,27 +36,33 @@ class KapitchiIdentity implements PluginInterface
         $em = $e->getApplication()->getEventManager();
         $sm = $e->getApplication()->getServiceManager();
         
+        $em->getSharedManager()->attach('KapitchiIdentity\Controller\IdentityController', array('create.pre', 'update.pre'), function($e) use ($sm) {
+            $form = $e->getParam('form');
+            $form->get('contact')->remove('identityId');
+        });
+        
         $em->getSharedManager()->attach('KapitchiIdentity\Service\Identity', 'persist', function($e) use ($sm) {
-            
+            $entity = $e->getParam('entity');
             $data = $e->getParam('data', false);
             if($data && isset($data['contact'])) {
                 $service = $sm->get('KapitchiContact\Service\Contact');
-                $entity = $service->createEntityFromArray($data['contact']);
-                $entity->setIdentityId($e->getParam('entity')->getId());
-                $service->persist($entity, $data['contact']);
+                $contact = $service->createEntityFromArray($data['contact']);
+                $contact->setDisplayName($entity->getDisplayName());
+                $contact->setIdentityId($e->getParam('entity')->getId());
+                $x = $service->persist($contact, $data['contact']);
+                $e->setParam('contactEvent', $x);
+                $entity->setDisplayName($x->getParam('entity')->getDisplayName());
+                $e->getTarget()->persist($entity);
             }
         });
         
         $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'init', function($e) use ($sm) {
             $form = $e->getTarget();
             $contactForm = $sm->get('KapitchiContact\Form\Contact');
+            $contactForm->remove('displayName');
             $form->add($contactForm, array(
                 'name' => 'contact'
             ));
-            
-            //TODO some extras - finetuning
-            //$form->get('displayName')->setAttribute('readonly', true);
-            //$contactForm->remove('displayName');
         });
         
         $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'setData', function($e) use ($sm) {
