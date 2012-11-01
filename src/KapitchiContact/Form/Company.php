@@ -14,7 +14,7 @@ class Company extends EventManagerAwareForm
             'name' => 'id',
             'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
-                'label' => 'ID',
+                'label' => $this->translate('ID'),
             ),
             'attributes' => array(
                 
@@ -24,7 +24,7 @@ class Company extends EventManagerAwareForm
             'name' => 'name',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Company name',
+                'label' => $this->translate('Company name'),
             ),
             'attributes' => array(
                 
@@ -36,7 +36,7 @@ class Company extends EventManagerAwareForm
             'name' => 'primaryContactId',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Primary contact',
+                'label' => $this->translate('Primary contact'),
             ),
             'attributes' => array(
                 'data-kap-ui' => 'contact-lookup-input',

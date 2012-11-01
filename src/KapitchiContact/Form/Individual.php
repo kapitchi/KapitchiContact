@@ -14,7 +14,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'id',
             'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
-                'label' => 'ID',
+                'label' => $this->translate('ID'),
             ),
             'attributes' => array(
             ),
@@ -23,7 +23,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'givenName',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Given name',
+                'label' => $this->translate('Given name'),
             ),
             'attributes' => array(
             ),
@@ -32,7 +32,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'middleName',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Middle name',
+                'label' => $this->translate('Middle name'),
             ),
             'attributes' => array(
             ),
@@ -41,7 +41,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'familyName',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Family name',
+                'label' => $this->translate('Family name'),
             ),
             'attributes' => array(
             ),
@@ -50,7 +50,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'maidenName',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Maiden name',
+                'label' => $this->translate('Maiden name'),
             ),
             'attributes' => array(
             ),
@@ -59,7 +59,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'honorificPrefix',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Honorific prefix',
+                'label' => $this->translate('Honorific prefix'),
             ),
             'attributes' => array(
             ),
@@ -68,7 +68,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'honorificSuffix',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Honorific suffix',
+                'label' => $this->translate('Honorific suffix'),
             ),
             'attributes' => array(
             ),
@@ -77,7 +77,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'dob',
             'type' => 'Zend\Form\Element\Date',
             'options' => array(
-                'label' => 'Date of birth',
+                'label' => $this->translate('Date of birth'),
             ),
             'attributes' => array(
             ),
@@ -86,7 +86,7 @@ class Individual extends EventManagerAwareForm
             'name' => 'personalId',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Personal ID',
+                'label' => $this->translate('Personal ID'),
             ),
             'attributes' => array(
             ),

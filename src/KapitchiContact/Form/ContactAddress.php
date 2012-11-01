@@ -14,7 +14,7 @@ class ContactAddress extends EventManagerAwareForm
             'name' => 'id',
             'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
-                'label' => 'ID',
+                'label' => $this->translate('ID'),
             ),
         ));
         
@@ -22,7 +22,7 @@ class ContactAddress extends EventManagerAwareForm
             'name' => 'contactId',
             'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
-                'label' => 'Contact ID',
+                'label' => $this->translate('Contact'),
             ),
             'attributes' => array(
             ),
@@ -32,9 +32,9 @@ class ContactAddress extends EventManagerAwareForm
             'name' => 'typeHandle',
             'type' => 'Zend\Form\Element\Select',
             'options' => array(
-                'label' => 'Address type',
+                'label' => $this->translate('Address type'),
                 'value_options' => array(
-                    'default' => 'Default'
+                    'default' => $this->translate('Default')
                 ),
             ),
         ));
@@ -43,7 +43,7 @@ class ContactAddress extends EventManagerAwareForm
             'name' => 'addressId',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Address',
+                'label' => $this->translate('Address'),
             ),
             'attributes' => array(
                 'data-kap-ui' => 'address-lookup-input',

@@ -16,16 +16,16 @@ class Contact extends EventManagerAwareForm
             'name' => 'id',
             'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
-                'label' => 'ID',
+                'label' => $this->translate('ID'),
             ),
             'attributes' => array(
             ),
         ));
         $this->add(array(
             'name' => 'identityId',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Zend\Form\Element\Hidden',
             'options' => array(
-                'label' => 'Identity',
+                'label' => $this->translate('Identity'),
             ),
             'attributes' => array(
                 'data-kap-ui' => 'identity-lookup-input'
@@ -38,7 +38,7 @@ class Contact extends EventManagerAwareForm
             'name' => 'typeHandle',
             'type' => 'Zend\Form\Element\Radio',
             'options' => array(
-                'label' => 'Type',
+                'label' => $this->translate('Type'),
             ),
             'attributes' => array(
                 
@@ -49,7 +49,7 @@ class Contact extends EventManagerAwareForm
             'name' => 'displayName',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Display name',
+                'label' => $this->translate('Display name'),
             ),
             'attributes' => array(
                 
