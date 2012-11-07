@@ -73,6 +73,9 @@ class Individual extends EventManagerAwareForm
             'attributes' => array(
             ),
         ));
+        
+        $currentYear = date("Y");
+        $minYear = $currentYear - 100;
         $this->add(array(
             'name' => 'dob',
             'type' => 'Zend\Form\Element\Date',
@@ -80,6 +83,10 @@ class Individual extends EventManagerAwareForm
                 'label' => $this->translate('Date of birth'),
             ),
             'attributes' => array(
+                'data-jquery-options' => json_encode(array(
+                    'changeYear' => 1,
+                    'yearRange' => "$minYear:$currentYear"
+                ))
             ),
         ));
         $this->add(array(

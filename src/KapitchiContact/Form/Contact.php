@@ -28,7 +28,7 @@ class Contact extends EventManagerAwareForm
                 'label' => $this->translate('Identity'),
             ),
             'attributes' => array(
-                'data-kap-ui' => 'identity-lookup-input'
+                //'data-kap-ui' => 'identity-lookup-input'
             ),
         ), array(
             'priority' => -100,
