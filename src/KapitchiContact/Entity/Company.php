@@ -10,6 +10,8 @@ class Company
     protected $id;
     protected $contactId;
     protected $name;
+    protected $refNumber;
+    protected $taxRefNumber;
     
     public function getId()
     {
@@ -41,5 +43,24 @@ class Company
         $this->name = $name;
     }
 
+    public function getRefNumber()
+    {
+        return $this->refNumber;
+    }
+
+    public function setRefNumber($refNumber)
+    {
+        $this->refNumber = $refNumber;
+    }
+
+    public function getTaxRefNumber()
+    {
+        return $this->taxRefNumber;
+    }
+
+    public function setTaxRefNumber($taxRefNumber)
+    {
+        $this->taxRefNumber = $taxRefNumber;
+    }
 
 }

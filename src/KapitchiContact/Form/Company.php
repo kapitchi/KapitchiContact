@@ -26,10 +26,22 @@ class Company extends EventManagerAwareForm
             'options' => array(
                 'label' => $this->translate('Company name'),
             ),
-            'attributes' => array(
-                
+        ));
+        
+        $this->add(array(
+            'name' => 'refNumber',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $this->translate('Company reference number'),
             ),
-            
+        ));
+        
+        $this->add(array(
+            'name' => 'taxRefNumber',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $this->translate('Tax reference number'),
+            ),
         ));
         
         $this->add(array(
