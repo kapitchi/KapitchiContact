@@ -11,6 +11,7 @@ class Contact
     protected $typeHandle;
     protected $identityId;
     protected $displayName;
+    protected $note;
     
     public function getId()
     {
@@ -50,6 +51,16 @@ class Contact
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
+    }
+
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    public function setNote($note)
+    {
+        $this->note = $note;
     }
 
 }

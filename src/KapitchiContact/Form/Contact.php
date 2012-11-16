@@ -56,6 +56,15 @@ class Contact extends EventManagerAwareForm
             ),
         ));
         
+        $this->add(array(
+            'name' => 'note',
+            'type' => 'Zend\Form\Element\Textarea',
+            'options' => array(
+                'label' => $this->translate('Note'),
+            ),
+        ), array(
+            'priority' => -1000,
+        ));
     }
     
 }
