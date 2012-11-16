@@ -47,7 +47,6 @@ class KapitchiIdentity implements PluginInterface
             if($data && isset($data['contact'])) {
                 $service = $sm->get('KapitchiContact\Service\Contact');
                 $contact = $service->createEntityFromArray($data['contact']);
-                $contact->setDisplayName($entity->getDisplayName());
                 $contact->setIdentityId($e->getParam('entity')->getId());
                 $x = $service->persist($contact, $data['contact']);
                 $e->setParam('contactEvent', $x);
@@ -58,11 +57,20 @@ class KapitchiIdentity implements PluginInterface
         
         $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'init', function($e) use ($sm) {
             $form = $e->getTarget();
+            $form->remove('displayName');
+            
             $contactForm = $sm->get('KapitchiContact\Form\Contact');
-            $contactForm->remove('displayName');
             $form->add($contactForm, array(
                 'name' => 'contact'
             ));
+        });
+        
+        $em->getSharedManager()->attach('KapitchiIdentity\Form\IdentityInputFilter', 'init', function($e) use ($sm) {
+            $target = $e->getTarget();
+            $target->remove('displayName');
+            
+            $if = $sm->get('KapitchiContact\Form\ContactInputFilter');
+            $e->getTarget()->add($if, 'contact');
         });
         
         $em->getSharedManager()->attach('KapitchiIdentity\Form\Identity', 'setData', function($e) use ($sm) {
@@ -80,11 +88,6 @@ class KapitchiIdentity implements PluginInterface
                     $contactForm->setData($service->createArrayFromEntity($entity));
                 }
             }
-        });
-        
-        $em->getSharedManager()->attach('KapitchiIdentity\Form\IdentityInputFilter', 'init', function($e) use ($sm) {
-            $if = $sm->get('KapitchiContact\Form\ContactInputFilter');
-            $e->getTarget()->add($if, 'contact');
         });
         
     }
