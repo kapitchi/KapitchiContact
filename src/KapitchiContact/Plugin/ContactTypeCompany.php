@@ -78,9 +78,9 @@ class ContactTypeCompany implements PluginInterface
             }
         });
         
-        $sharedEm->attach('KapitchiContact\Element\ContactInputFilter', 'init', function($e) use ($sm) {
+        $sharedEm->attach('KapitchiContact\Form\ContactInputFilter', 'init', function($e) use ($sm) {
             $ins = $e->getTarget();
-            $ins->add($sm->get('KapitchiContact\Element\CompanyInputFilter'), 'company');
+            $ins->add($sm->get('KapitchiContact\Form\CompanyInputFilter'), 'company');
         });
         
         

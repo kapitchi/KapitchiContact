@@ -68,11 +68,15 @@ class Module extends AbstractModule implements
     public function getServiceConfig()
     {
         return array(
+            'aliases' => array(
+                'KapitchiContact\Mapper\Storage' => 'KapitchiContact\Mapper\StorageDbAdapter'
+            ),
             'invokables' => array(
                 'KapitchiContact\Entity\Contact' => 'KapitchiContact\Entity\Contact',
                 'KapitchiContact\Entity\ContactAddress' => 'KapitchiContact\Entity\ContactAddress',
                 'KapitchiContact\Entity\Individual' => 'KapitchiContact\Entity\Individual',
                 'KapitchiContact\Entity\Company' => 'KapitchiContact\Entity\Company',
+                'KapitchiContact\Entity\Storage' => 'KapitchiContact\Entity\Storage',
             ),
             'factories' => array(
                 //Contact
@@ -82,6 +86,7 @@ class Module extends AbstractModule implements
                         $sm->get('KapitchiContact\Entity\Contact'),
                         $sm->get('KapitchiContact\Entity\ContactHydrator')
                     );
+                    $s->setStorageService($sm->get('KapitchiContact\Service\Storage'));
                     return $s;
                 },
                 'KapitchiContact\Mapper\ContactDbAdapter' => function ($sm) {
@@ -208,6 +213,29 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Form\ContactAddressInputFilter' => function ($sm) {
                     $ins = new Form\ContactAddressInputFilter();
                     return $ins;
+                },
+                //Storage
+                'KapitchiContact\Service\Storage' => function ($sm) {
+                    $s = new Service\Storage(
+                        $sm->get('KapitchiContact\Mapper\Storage'),
+                        $sm->get('KapitchiContact\Entity\Storage'),
+                        $sm->get('KapitchiContact\Entity\StorageHydrator')
+                    );
+                    return $s;
+                },
+                'KapitchiContact\Mapper\StorageDbAdapter' => function ($sm) {
+                    return new EntityDbAdapterMapper(
+                        $sm->get('Zend\Db\Adapter\Adapter'),
+                        new EntityDbAdapterMapperOptions(array(
+                            'tableName' => 'contact_storage',
+                            'primaryKey' => 'id',
+                            'hydrator' => $sm->get('KapitchiContact\Entity\StorageHydrator'),
+                            'entityPrototype' => $sm->get('KapitchiContact\Entity\Storage'),
+                        ))
+                    );
+                },
+                'KapitchiContact\Entity\StorageHydrator' => function ($sm) {
+                    return new \Zend\Stdlib\Hydrator\ClassMethods(false);
                 },
             )
         );

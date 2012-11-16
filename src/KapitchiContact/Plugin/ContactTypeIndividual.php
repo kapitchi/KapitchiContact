@@ -67,9 +67,9 @@ class ContactTypeIndividual implements PluginInterface
             }
         });
         
-        $sharedEm->attach('KapitchiContact\Element\ContactInputFilter', 'init', function($e) use ($sm) {
+        $sharedEm->attach('KapitchiContact\Form\ContactInputFilter', 'init', function($e) use ($sm) {
             $ins = $e->getTarget();
-            $ins->add($sm->get('KapitchiContact\Element\IndividualInputFilter'), 'individual');
+            $ins->add($sm->get('KapitchiContact\Form\IndividualInputFilter'), 'individual');
         });
         
         $sharedEm->attach('KapitchiContact\Form\ContactInputFilter', 'isValid.pre', function($e) use ($sm) {
