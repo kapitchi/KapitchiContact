@@ -108,6 +108,7 @@ class ContactTypeCompany extends AbstractPlugin
                 $company = $sm->get('KapitchiContact\Service\Company')->getOneBy(array('contactId' => $entity->getId()));
                 if($company->getPrimaryContactId()) {
                     $individual = $contactService->get($company->getPrimaryContactId());
+                    $ret['primaryContactDisplayName'] = $individual->getDisplayName();
                     $ret['primaryEmail'] = $contactService->getFieldValues($individual, 'primaryEmail');
                     $ret['primaryPhone'] = $contactService->getFieldValues($individual, 'primaryPhone');
                 }
