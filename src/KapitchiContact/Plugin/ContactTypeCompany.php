@@ -1,13 +1,14 @@
 <?php
 namespace KapitchiContact\Plugin;
 
-use Zend\EventManager\EventInterface,
-    KapitchiApp\PluginManager\PluginInterface;
+use Zend\EventManager\EventInterface;
+use KapitchiApp\PluginManager\AbstractPlugin;
+        
 /**
  *
  * @author Matus Zeman <mz@kapitchi.com>
  */
-class ContactTypeCompany implements PluginInterface
+class ContactTypeCompany extends AbstractPlugin
 {
     public function getAuthor()
     {
@@ -35,12 +36,14 @@ class ContactTypeCompany implements PluginInterface
         $sm = $e->getApplication()->getServiceManager();
         $sharedEm = $em->getSharedManager();
         
-        $sharedEm->attach('KapitchiContact\Form\Contact', 'init', function($e) use ($sm) {
+        $instance = $this;
+        
+        $sharedEm->attach('KapitchiContact\Form\Contact', 'init', function($e) use ($sm, $instance) {
             $form = $e->getTarget();
             $typeHandleEl = $form->get('typeHandle');
             $opts = $typeHandleEl->getValueOptions();
             $opts[] = array(
-                'label' => 'Company',
+                'label' => $instance->translate('Company'),
                 'value' => 'company',
             );
             $typeHandleEl->setValueOptions($opts);
@@ -91,6 +94,24 @@ class ContactTypeCompany implements PluginInterface
                 $company = $companyService->createEntityFromArray($data['company']);
                 $company->setContactId($e->getParam('entity')->getId());
                 $companyService->persist($company, $data['company']);
+            }
+        });
+        
+        $sharedEm->attach('KapitchiContact\Service\Contact', 'getFieldValues', function($e) use ($sm, $instance) {
+            $contactService = $e->getTarget();
+            $entity = $e->getParam('entity');
+            if($entity->getTypeHandle() == 'company') {
+                $ret = array(
+                    'typeLabel' => $instance->translate('Company')
+                );
+                
+                $company = $sm->get('KapitchiContact\Service\Company')->getOneBy(array('contactId' => $entity->getId()));
+                if($company->getPrimaryContactId()) {
+                    $individual = $contactService->get($company->getPrimaryContactId());
+                    $ret['primaryEmail'] = $contactService->getFieldValues($individual, 'primaryEmail');
+                    $ret['primaryPhone'] = $contactService->getFieldValues($individual, 'primaryPhone');
+                }
+                return $ret;
             }
         });
         

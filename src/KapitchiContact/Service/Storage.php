@@ -18,6 +18,16 @@ class Storage extends EntityService
         return current($items);
     }
     
+    public function fetchPrimaryValue($contact, $handle)
+    {
+        $data = $this->fetchPrimary($contact, $handle);
+        if($data) {
+            return $data->getValue();
+        }
+        
+        return null;
+    }
+    
     public function fetchData($contactId, $handle) {
         $all = $this->fetchAll(array(
             'contactId' => $contactId,

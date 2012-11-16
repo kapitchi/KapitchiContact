@@ -2,12 +2,12 @@
 namespace KapitchiContact\Plugin;
 
 use Zend\EventManager\EventInterface,
-    KapitchiApp\PluginManager\PluginInterface;
+    KapitchiApp\PluginManager\AbstractPlugin;
 /**
  *
  * @author Matus Zeman <mz@kapitchi.com>
  */
-class ContactTypeIndividual implements PluginInterface
+class ContactTypeIndividual extends AbstractPlugin
 {
     public function getAuthor()
     {
@@ -34,6 +34,14 @@ class ContactTypeIndividual implements PluginInterface
         $em = $e->getApplication()->getEventManager();
         $sm = $e->getApplication()->getServiceManager();
         $sharedEm = $em->getSharedManager();
+        $instance = $this;
+        
+        $sharedEm->attach('KapitchiContact\Service\Contact', 'getFieldValues', function($e) use ($sm, $instance) {
+            $entity = $e->getParam('entity');
+            if($entity->getTypeHandle() == 'individual') {
+                return array('typeLabel' => $instance->translate('Individual'));
+            }
+        });
         
         $sharedEm->attach('KapitchiContact\Form\Contact', 'init', function($e) use ($sm) {
             $form = $e->getTarget();

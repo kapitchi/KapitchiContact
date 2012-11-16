@@ -12,6 +12,7 @@ class Company
     protected $name;
     protected $refNumber;
     protected $taxRefNumber;
+    protected $primaryContactId;
     
     public function getId()
     {
@@ -63,4 +64,13 @@ class Company
         $this->taxRefNumber = $taxRefNumber;
     }
 
+    public function getPrimaryContactId()
+    {
+        return $this->primaryContactId;
+    }
+
+    public function setPrimaryContactId($primaryContactId)
+    {
+        $this->primaryContactId = $primaryContactId;
+    }
 }
