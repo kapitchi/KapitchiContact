@@ -16,9 +16,6 @@ class Company extends EventManagerAwareForm
             'options' => array(
                 'label' => $this->translate('ID'),
             ),
-            'attributes' => array(
-                
-            ),
         ));
         $this->add(array(
             'name' => 'name',
@@ -41,6 +38,14 @@ class Company extends EventManagerAwareForm
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
                 'label' => $this->translate('Tax reference number'),
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'taxRegNumber',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $this->translate('Tax registration number'),
             ),
         ));
         

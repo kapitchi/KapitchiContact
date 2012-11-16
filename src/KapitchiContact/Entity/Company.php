@@ -12,6 +12,7 @@ class Company
     protected $name;
     protected $refNumber;
     protected $taxRefNumber;
+    protected $taxRegNumber;
     protected $primaryContactId;
     
     public function getId()
@@ -52,6 +53,16 @@ class Company
     public function setRefNumber($refNumber)
     {
         $this->refNumber = $refNumber;
+    }
+    
+    public function getTaxRegNumber()
+    {
+        return $this->taxRegNumber;
+    }
+
+    public function setTaxRegNumber($taxRegNumber)
+    {
+        $this->taxRegNumber = $taxRegNumber;
     }
 
     public function getTaxRefNumber()

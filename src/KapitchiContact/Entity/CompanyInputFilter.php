@@ -34,5 +34,10 @@ class CompanyInputFilter extends EventManagerAwareInputFilter
             'name'       => 'taxRefNumber',
             'required'   => false,
         ));
+        
+        $this->add(array(
+            'name'       => 'taxRegNumber',
+            'required'   => false,
+        ));
     }
 }
