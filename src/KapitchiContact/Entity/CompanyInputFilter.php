@@ -36,8 +36,18 @@ class CompanyInputFilter extends EventManagerAwareInputFilter
         ));
         
         $this->add(array(
-            'name'       => 'taxRegNumber',
+            'name'       => 'taxRefNumber',
             'required'   => false,
+        ));
+        
+        $this->add(array(
+            'name'       => 'primaryContactId',
+            'required'   => false,
+            'filters' => array(
+                array(
+                    'name' => 'Null'
+                )
+            )
         ));
     }
 }
