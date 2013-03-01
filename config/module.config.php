@@ -7,19 +7,6 @@ return array(
             'Contact/ContactTypeCompany' => 'KapitchiContact\Plugin\ContactTypeCompany',
         ),
     ),
-    'KapitchiContact' => array(
-        'contact_types' => array(
-            'factories' => array(
-                'individual' => function($sm) {
-                    $sl = $sm->getServiceLocator();
-                    $ins = new \KapitchiContact\ContactType\Individual();
-                    $ins->setEntityService($sl->get('KapitchiContact\Service\Individual'));
-                    $ins->setForm($sl->get('KapitchiContact\Form\Individual'));
-                    return $ins;
-                },
-            )
-        )
-    ),
     'router' => array(
         'routes' => array(
             'contact' => array(
@@ -66,7 +53,7 @@ return array(
                         ),
                         'may_terminate' => false,
                         'child_routes' => array(
-                            'plugin' => array(
+                            'contact' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
                                     'route'    => '/contact[/:action][/:id]',
