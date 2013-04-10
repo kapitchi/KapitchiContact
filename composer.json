@@ -1,5 +1,6 @@
 {
     "name": "kapitchi/contact",
+    "license": "LGPL-3.0",
     "description": "Contact management module",
     "keywords": [
         "kapitchi",
