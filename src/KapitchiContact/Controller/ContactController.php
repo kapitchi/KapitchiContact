@@ -8,24 +8,10 @@
 
 namespace KapitchiContact\Controller;
 
-use KapitchiEntity\Controller\AbstractEntityController;
+use KapitchiEntity\Controller\EntityContoller;
 
-class ContactController extends AbstractEntityController
+class ContactController extends EntityContoller
 {
-    public function getIndexUrl()
-    {
-        return $this->url()->fromRoute('contact/contact', array(
-            'action' => 'index'
-        ));
-    }
-
-    public function getUpdateUrl($entity)
-    {
-        return $this->url()->fromRoute('contact/contact', array(
-            'action' => 'update', 'id' => $entity->getId()
-        ));
-    }
-    
     public function lookupAction()
     {
         return array(
