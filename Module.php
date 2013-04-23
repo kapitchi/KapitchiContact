@@ -93,18 +93,14 @@ class Module extends AbstractModule implements
                         $sm->get('KapitchiContact\Entity\Contact'),
                         $sm->get('KapitchiContact\Entity\ContactHydrator')
                     );
-                    $s->setStorageService($sm->get('KapitchiContact\Service\Storage'));
                     return $s;
                 },
                 'KapitchiContact\Mapper\ContactDbAdapter' => function ($sm) {
                     return new EntityDbAdapterMapper(
                         $sm->get('Zend\Db\Adapter\Adapter'),
-                        new EntityDbAdapterMapperOptions(array(
-                            'tableName' => 'contact',
-                            'primaryKey' => 'id',
-                            'hydrator' => $sm->get('KapitchiContact\Entity\ContactHydrator'),
-                            'entityPrototype' => $sm->get('KapitchiContact\Entity\Contact'),
-                        ))
+                        $sm->get('KapitchiContact\Entity\Contact'),
+                        $sm->get('KapitchiContact\Entity\ContactHydrator'),
+                       'contact'
                     );
                 },
                 'KapitchiContact\Entity\ContactHydrator' => function ($sm) {
@@ -134,12 +130,9 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Mapper\IndividualDbAdapter' => function ($sm) {
                     return new EntityDbAdapterMapper(
                         $sm->get('Zend\Db\Adapter\Adapter'),
-                        new EntityDbAdapterMapperOptions(array(
-                            'tableName' => 'contact_individual',
-                            'primaryKey' => 'id',
-                            'hydrator' => $sm->get('KapitchiContact\Entity\IndividualHydrator'),
-                            'entityPrototype' => $sm->get('KapitchiContact\Entity\Individual'),
-                        ))
+                        $sm->get('KapitchiContact\Entity\Individual'),
+                        $sm->get('KapitchiContact\Entity\IndividualHydrator'),
+                       'contact_individual'
                     );
                 },
                 'KapitchiContact\Entity\IndividualHydrator' => function ($sm) {
@@ -168,12 +161,9 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Mapper\CompanyDbAdapter' => function ($sm) {
                     return new EntityDbAdapterMapper(
                         $sm->get('Zend\Db\Adapter\Adapter'),
-                        new EntityDbAdapterMapperOptions(array(
-                            'tableName' => 'contact_company',
-                            'primaryKey' => 'id',
-                            'hydrator' => $sm->get('KapitchiContact\Entity\CompanyHydrator'),
-                            'entityPrototype' => $sm->get('KapitchiContact\Entity\Company'),
-                        ))
+                        $sm->get('KapitchiContact\Entity\Company'),
+                        $sm->get('KapitchiContact\Entity\CompanyHydrator'),
+                        'contact_company'
                     );
                 },
                 'KapitchiContact\Entity\CompanyHydrator' => function ($sm) {
@@ -201,12 +191,9 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Mapper\ContactAddressDbAdapter' => function ($sm) {
                     return new EntityDbAdapterMapper(
                         $sm->get('Zend\Db\Adapter\Adapter'),
-                        new EntityDbAdapterMapperOptions(array(
-                            'tableName' => 'contact_address',
-                            'primaryKey' => 'id',
-                            'hydrator' => $sm->get('KapitchiContact\Entity\ContactAddressHydrator'),
-                            'entityPrototype' => $sm->get('KapitchiContact\Entity\ContactAddress'),
-                        ))
+                        $sm->get('KapitchiContact\Entity\ContactAddress'),
+                        $sm->get('KapitchiContact\Entity\ContactAddressHydrator'),
+                        'contact_address'
                     );
                 },
                 'KapitchiContact\Entity\ContactAddressHydrator' => function ($sm) {
@@ -233,12 +220,9 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Mapper\StorageDbAdapter' => function ($sm) {
                     return new EntityDbAdapterMapper(
                         $sm->get('Zend\Db\Adapter\Adapter'),
-                        new EntityDbAdapterMapperOptions(array(
-                            'tableName' => 'contact_storage',
-                            'primaryKey' => 'id',
-                            'hydrator' => $sm->get('KapitchiContact\Entity\StorageHydrator'),
-                            'entityPrototype' => $sm->get('KapitchiContact\Entity\Storage'),
-                        ))
+                        $sm->get('KapitchiContact\Entity\Storage'),
+                        $sm->get('KapitchiContact\Entity\StorageHydrator'),
+                       'contact_storage'
                     );
                 },
                 'KapitchiContact\Entity\StorageHydrator' => function ($sm) {
