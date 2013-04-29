@@ -8,14 +8,8 @@
 
 namespace KapitchiContact\Controller;
 
-use KapitchiEntity\Controller\EntityContoller;
+use KapitchiEntity\Controller\EntityController;
 
-class ContactController extends EntityContoller
+class ContactController extends EntityController
 {
-    public function lookupAction()
-    {
-        return array(
-            'iframeCallerId' => $this->getRequest()->getQuery()->get('iframeCallerId')
-        );
-    }
 }
