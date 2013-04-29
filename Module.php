@@ -84,6 +84,7 @@ class Module extends AbstractModule implements
                 'KapitchiContact\Entity\Individual' => 'KapitchiContact\Entity\Individual',
                 'KapitchiContact\Entity\Company' => 'KapitchiContact\Entity\Company',
                 'KapitchiContact\Entity\Storage' => 'KapitchiContact\Entity\Storage',
+                'KapitchiContact\Entity\Tag' => 'KapitchiContact\Entity\Tag',
             ),
             'factories' => array(
                 //Contact
@@ -93,6 +94,7 @@ class Module extends AbstractModule implements
                         $sm->get('KapitchiContact\Entity\Contact'),
                         $sm->get('KapitchiContact\Entity\ContactHydrator')
                     );
+                    $s->setStorageService($sm->get('KapitchiContact\Service\Storage'));
                     return $s;
                 },
                 'KapitchiContact\Mapper\ContactDbAdapter' => function ($sm) {
@@ -147,7 +149,26 @@ class Module extends AbstractModule implements
                     $ins = new Form\IndividualInputFilter();
                     return $ins;
                 },
-                        
+                //Tag
+                'KapitchiContact\Service\Tag' => function ($sm) {
+                    $s = new Service\Tag(
+                        $sm->get('KapitchiContact\Mapper\TagDbAdapter'),
+                        $sm->get('KapitchiContact\Entity\Tag'),
+                        $sm->get('KapitchiContact\Entity\TagHydrator')
+                    );
+                    return $s;
+                },
+                'KapitchiContact\Mapper\TagDbAdapter' => function ($sm) {
+                    return new Mapper\TagDbAdapter(
+                        $sm->get('Zend\Db\Adapter\Adapter'),
+                        $sm->get('KapitchiContact\Entity\Tag'),
+                        $sm->get('KapitchiContact\Entity\TagHydrator'),
+                        'contact_tag'
+                    );
+                },
+                'KapitchiContact\Entity\TagHydrator' => function ($sm) {
+                    return new \Zend\Stdlib\Hydrator\ClassMethods(false);
+                },
                 //Company     
                 'KapitchiContact\Service\Company' => function ($sm) {
                     $s = new Service\Company(

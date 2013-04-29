@@ -35,6 +35,20 @@ class Storage extends EntityService
         return null;
     }
     
+    public function findContactIdByHandleValue($handle, $value)
+    {
+        $entity = $this->findOneBy(array(
+            'handle' => $handle,
+            'value' => $value
+        ));
+        
+        if($entity) {
+            return $entity->getContactId();
+        }
+        
+        return null;
+    }
+    
     public function fetchData($contactId, $handle) {
         $all = $this->fetchAll(array(
             'contactId' => $contactId,
@@ -43,35 +57,65 @@ class Storage extends EntityService
         
         $ret = array();
         foreach($all as $rec) {
-            $ret[$rec->getTag()] = $rec->getValue();
+            $ret[$rec->getTag()] = array(
+                'value' => $rec->getValue(),
+                'priority' => $rec->getPriority(),
+                'tag' => $rec->getTag(),
+            );
         }
         
         return $ret;
     }
     
-    public function persistData($contactId, $handle, $data)
+    /**
+     * This method removes all storage records first for contactId and handle
+     * and then inserts all the values from $data param.
+     * 
+     * $data in format:
+     * array(
+     *     'value' => 'email@example.com',
+     *     'tag' => 'work',//optional - defaults to 'default'
+     *     'priority' => 1, //optional
+     * )
+     * 
+     * @param int $contactId
+     * @param string $handle
+     * @param array $data
+     * @return array \KapitchiContact\Entity\Storage[]
+     */
+    public function persistData($contactId, $handle, array $data)
     {
-        $mapper = $this->getMapper();
-        $adapter = $this->getMapper()->getPaginatorAdapter(array(
-            'contactId' => $contactId,
-            'handle' => $handle,
-        ));
-        foreach($adapter->getItems(0, $adapter->count()) as $entity) {
-            $mapper->remove($entity);
-        }
-        
         $ret = array();
+        $tags = array();
         $prio = 0;
         foreach($data as $rec) {
+            $tag = empty($rec['tag']) ? 'default' : $rec['tag'];
+            
+            if(in_array($tag, $tags)) {
+                throw new \InvalidArgumentException("Same tag used on multiple values");
+            }
+            $tags[] = $tag;
+            
             $entity = $this->createEntityFromArray(array(
                 'contactId' => $contactId,
                 'handle' => $handle,
                 'value' => empty($rec['value']) ? '' : $rec['value'],
                 'priority' => empty($rec['priority']) ? $prio-- : $rec['priority'],
-                'tag' => empty($rec['tag']) ? 'default' : $rec['tag'],
+                'tag' => $tag,
             ));
-            $mapper->persist($entity);
             $ret[] = $entity;
+        }
+        
+        $mapper = $this->getMapper();
+        $adapter = $this->getMapper()->getPaginatorAdapter(array(
+            'contactId' => $contactId,
+            'handle' => $handle,
+        ));
+        foreach($adapter->getItems(0, (int)$adapter->count()) as $entity) {
+            $mapper->remove($entity);
+        }
+        foreach($ret as $entity) {
+            $mapper->persist($entity);
         }
         
         return $ret;
