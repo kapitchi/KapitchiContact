@@ -67,6 +67,7 @@ class KapitchiIdentity implements PluginInterface
             $form->remove('displayName');
             
             $contactForm = $sm->get('KapitchiContact\Form\Contact');
+            $contactForm->setOptions(array('render_partial' => 'kapitchi-contact/partial/form/contact-identity'));
             $form->add($contactForm, array(
                 'name' => 'contact'
             ));
