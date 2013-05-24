@@ -44,7 +44,7 @@ class Contact extends EventManagerAwareForm
             'name' => 'typeHandle',
             'type' => 'Zend\Form\Element\Radio',
             'options' => array(
-                'label' => $this->translate('Type'),
+                'label' => $this->translate('Contact type'),
             ),
             'attributes' => array(
                 
