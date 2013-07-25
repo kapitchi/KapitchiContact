@@ -63,7 +63,7 @@ class Company extends EventManagerAwareForm
                 'label' => $this->translate('Primary contact'),
             ),
             'attributes' => array(
-                'data-kap-ui' => 'contact-lookup-input',
+                'data-kap-input' => 'contact-selector',
             ),
             
         ));
