@@ -108,5 +108,12 @@ class ContactTypeIndividual extends AbstractPlugin
             }
         });
         
+        $sharedEm->attach('KapitchiContact\Service\Contact', 'remove', function($e) use ($sm) {
+            $entity = $e->getParam('entity');
+            $pluginService = $sm->get('KapitchiContact\Service\Individual');
+            foreach($pluginService->fetchAll(array('contactId' => $entity->getId())) as $company) {
+                $pluginService->remove($company);
+            }
+        }, 10);
     }
 }

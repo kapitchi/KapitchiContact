@@ -17,4 +17,11 @@ class Tag extends EntityService
         $tag = $this->getOneBy(array('handle' => $tagHandle));
         $this->getMapper()->addContactTag($contactId, $tag->getId());
     }
+    
+    public function removeAllByContactId($contactId)
+    {
+        foreach($this->fetchAll(array('contactId' => $contactId)) as $data) {
+            $this->remove($data);
+        }
+    }
 }

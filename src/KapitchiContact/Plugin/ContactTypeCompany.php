@@ -104,6 +104,14 @@ class ContactTypeCompany extends AbstractPlugin
             }
         });
         
+        $sharedEm->attach('KapitchiContact\Service\Contact', 'remove', function($e) use ($sm) {
+            $entity = $e->getParam('entity');
+            $pluginService = $sm->get('KapitchiContact\Service\Company');
+            foreach($pluginService->fetchAll(array('contactId' => $entity->getId())) as $company) {
+                $pluginService->remove($company);
+            }
+        }, 10);
+        
         $sharedEm->attach('KapitchiContact\Service\Contact', 'getFieldValues', function($e) use ($sm, $instance) {
             $contactService = $e->getTarget();
             $entity = $e->getParam('entity');

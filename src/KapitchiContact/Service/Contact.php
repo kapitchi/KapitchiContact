@@ -14,11 +14,14 @@ use KapitchiEntity\Service\EntityService,
 class Contact extends EntityService
 {
     protected $storageService;
+    protected $tagService;
     
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
         $em = $this->getEventManager();
+        $instance = $this;
+        
         $em->attach('persist', function($e) {
             $service = $e->getTarget()->getStorageService();
             $entity = $e->getParam('entity');
@@ -29,6 +32,16 @@ class Contact extends EntityService
 //                $service->persistData($entity->getId(), 'email', $data['emails']);
 //            }
         });
+        
+        $em->attach('remove', function($e) use ($instance) {
+            $entity = $e->getParam('entity');
+            $instance->getStorageService()->removeAllByContactId($entity->getId());
+        }, 5);
+        
+        $em->attach('remove', function($e) use ($instance) {
+            $entity = $e->getParam('entity');
+            $instance->getTagService()->removeAllByContactId($entity->getId());
+        }, 5);
     }
     
     public function getStorageService()
@@ -40,5 +53,15 @@ class Contact extends EntityService
     {
         $this->storageService = $storageService;
     }
+    
+    public function getTagService()
+    {
+        return $this->tagService;
+    }
 
+    public function setTagService($tagService)
+    {
+        $this->tagService = $tagService;
+    }
+    
 }

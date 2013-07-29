@@ -95,6 +95,7 @@ class Module extends AbstractModule implements
                         $sm->get('KapitchiContact\Entity\ContactHydrator')
                     );
                     $s->setStorageService($sm->get('KapitchiContact\Service\Storage'));
+                    $s->setTagService($sm->get('KapitchiContact\Service\Tag'));
                     return $s;
                 },
                 'KapitchiContact\Mapper\ContactDbAdapter' => function ($sm) {

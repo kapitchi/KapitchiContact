@@ -121,4 +121,10 @@ class Storage extends EntityService
         return $ret;
     }
     
+    public function removeAllByContactId($contactId)
+    {
+        foreach($this->fetchAll(array('contactId' => $contactId)) as $data) {
+            $this->remove($data);
+        }
+    }
 }
